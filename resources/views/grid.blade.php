@@ -8,7 +8,7 @@
                         <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#{{$_this->id()}}_filters" aria-expanded="false"
                                 aria-controls="filters">
-                            <i class="fa fa-filter"></i>
+                            <i class="ri-filter-line"></i>
                         </button>
                     @endif
                     @if($search_form = $_this->get('search_form'))
@@ -23,7 +23,7 @@
             </div>
             @if($_this->get('filters', null))
                 <div class="collapse mt-3" id="{{$_this->id()}}_filters">
-                    <div class="filter-container bg-white">
+                    <div class="filter-container">
                         <div id="filterRows">
                             <!-- filter rows will be added here -->
                         </div>
@@ -36,8 +36,8 @@
                                 </select>
                                 <button id="addFilter" class="flex-shrink-0 btn btn-light">+ Add</button>
                             </div>
-                            <div class="d-flex gap-1">
-                                <button id="resetFilters" class="btn btn-outline-secondary">Reset</button>
+                            <div class="d-flex gap-3">
+                                <button id="resetFilters" class="btn btn-light">Reset</button>
                                 <button id="applyFilters" class="btn btn-primary">Apply</button>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                 // Delete button
                 const deleteBtn = $('<button>')
                     .addClass('btn btn-outline-danger')
-                    .html('<i class="bi bi-trash"></i>')
+                    .html('<i class="ri-delete-bin-line"></i>')
                     .click(function () {
                         $(this).closest('.filter-row').remove();
                     });

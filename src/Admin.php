@@ -47,6 +47,19 @@ class Admin
         return $this->layout;
     }
 
+    public function asset($path)
+    {
+        if (Str::isUrl($path)) {
+            return $path;
+        }
+
+        if (Str::startsWith($path, '/')) {
+            $path = Str::replaceFirst('/', '', $path);
+        }
+
+        return asset('/vendor/admin/' . $path);
+    }
+
     public function group(...$args)
     {
         $params = ['prefix' => config('admin.prefix'), 'middleware' => 'web'];
