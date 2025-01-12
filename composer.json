@@ -1,0 +1,18 @@
+{
+    "name": "entryshop/admin",
+    "autoload": {
+        "psr-4": {
+            "Entryshop\\Admin\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Entryshop\\Admin\\AdminServiceProvider"
+            ]
+        }
+    }
+}
