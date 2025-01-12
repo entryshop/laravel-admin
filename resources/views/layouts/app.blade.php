@@ -1,9 +1,6 @@
 @extends('admin::layouts.html')
 
 @section('body')
-    <div>
-        {{auth()->user()->name}}
-    </div>
     <header>
         @if($back = $_this->back())
             <a href="{{$back}}">Back</a>
