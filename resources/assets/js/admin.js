@@ -1,3 +1,7 @@
+/**
+ * Entryshop laravel admin
+ * Author: Alex
+ */
 class Admin {
 
     init() {
@@ -67,12 +71,15 @@ class Admin {
     }
 }
 
-window.admin = function () {
-    if (!window._admin) {
-        window._admin = new Admin();
-    }
-    return window._admin;
-}
+(function () {
 
-window.admin().init();
+    window.admin = function () {
+        if (!window._admin) {
+            window._admin = new Admin();
+        }
+        return window._admin;
+    }
+    window.admin().init();
+})();
+
 
