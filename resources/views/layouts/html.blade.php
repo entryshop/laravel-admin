@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
-    <style nonce="{{csp_nonce()}}">
+    <style nonce="{{admin()->csp()}}">
         body, html {
             margin: 0;
             padding: 0;

@@ -49,7 +49,7 @@
                 let element = $(this).data('element');
                 $(`#data_lazy_dialog`).modal('show');
                 $.post("{{route('admin.api.render.element')}}", {
-                    _nonce: "{{csp_nonce()}}",
+                    _nonce: "{{admin()->csp()}}",
                     element: element,
                     payload: payload
                 }).then(function (response) {
