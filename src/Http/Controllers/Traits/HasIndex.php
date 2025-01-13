@@ -10,6 +10,7 @@ trait HasIndex
 {
     public function index()
     {
+        admin()->title($this->getlabel());
         $grid = $this->grid();
         $this->layout()->title($this->getlabel());
         return $this->layout()->child($grid)->render();

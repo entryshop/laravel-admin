@@ -6,6 +6,7 @@ use Entryshop\Admin\Components\Element;
 
 /**
  * @method self header($value = null)
+ * @method self title($value = null)
  * @method self body($value = null)
  * @method self footer($value = null)
  */

@@ -9,6 +9,9 @@ use Entryshop\Admin\Concerns\InteractsWithEvents;
 use Route;
 use Str;
 
+/**
+ * @method self|string home($value = null) home page
+ */
 class Admin
 {
     use InteractsWithEvents;
@@ -19,6 +22,11 @@ class Admin
     public function __call($method, $parameters)
     {
         return $this->callHasVariables($method, $parameters);
+    }
+
+    public function getDefaultHome()
+    {
+        return $this->url('/');
     }
 
     public function url($path)

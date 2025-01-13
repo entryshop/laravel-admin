@@ -6,6 +6,7 @@ use Entryshop\Admin\Components\Element;
 
 /**
  * @method self|array models($value = null)
+ * @method self|array columns($value = null)
  * @method self|bool selectable($value = null)
  */
 class Table extends Element

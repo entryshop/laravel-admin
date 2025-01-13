@@ -89,7 +89,7 @@ class Grid extends Element
             $search_keyword = request('search');
 
             $search_form = Form::make()->fields([
-                Text::make('search', '搜索')->placeholder('请输入关键词'),
+                Text::make('search')->placeholder(__('admin::base.search')),
             ])->plain()
                 ->model([
                     'search' => $search_keyword,
@@ -144,6 +144,9 @@ class Grid extends Element
 
         $this->set('models', $this->models->paginate($this->get('perPage', 10)));
 
+        /**
+         * @var Table $_table
+         */
         $_table = Table::make()->models($this->models());
 
         if (is_callable($table = $this->getOriginal('table'))) {

@@ -7,6 +7,7 @@ use Entryshop\Admin\Concerns\HasChildren;
 /**
  * @method self|string title($value = null)
  * @method self|string back($value = null)
+ * @method self|array menus($value = null)
  */
 class Layout extends Element
 {

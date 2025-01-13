@@ -13,8 +13,9 @@ use Illuminate\Support\Traits\Tappable;
  * @method self|string id($value = null)
  * @method self|string scripts($value = null)
  * @method self|string styles($value = null)
+ * @method self|string view($value = null)
  */
-abstract class Element
+class Element
 {
     use Makeable;
     use CanCallMethods;

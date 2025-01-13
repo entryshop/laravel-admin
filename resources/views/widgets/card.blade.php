@@ -1,7 +1,12 @@
 <div {!!$_this->getAttributes()->merge(['class' =>'card'])  !!}>
-    @if($header = $_this->header())
+    @if(($header = $_this->header()) || ($title = $_this->title()))
         <div class="card-header">
-            {{render($header)}}
+            @if(!empty($title))
+                <h6 class="card-title mb-0">{{$title}}</h6>
+            @endif
+            @if(!empty($header))
+                {{render($header)}}
+            @endif
         </div>
     @endif
     @if($body = $_this->body())
