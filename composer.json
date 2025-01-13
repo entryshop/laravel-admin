@@ -1,5 +1,6 @@
 {
     "name": "entryshop/admin",
+    "version": "0.0.2",
     "autoload": {
         "psr-4": {
             "Entryshop\\Admin\\": "src/"
