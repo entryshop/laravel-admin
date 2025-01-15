@@ -11,6 +11,7 @@ use Entryshop\Admin\Http\Controllers\Traits\HasShow;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Lang;
+use Str;
 
 class AdminController
 {
@@ -37,7 +38,7 @@ class AdminController
         $this->callMethods('setup');
     }
 
-    public function model($id = null)
+    protected function model($id = null)
     {
         if (empty($id)) {
             return new $this->model;
@@ -46,13 +47,28 @@ class AdminController
         return $this->model::find($id);
     }
 
-    public function models()
+    protected function models()
     {
         if (is_string($this->model)) {
             return $this->model::query();
         }
 
         return $this->model;
+    }
+
+    protected function getLabel()
+    {
+        // get name from model
+        if (is_string($this->model)) {
+            return Str::title(class_basename($this->model));
+        }
+        return '';
+    }
+
+    protected function getLabelPlural()
+    {
+        // get name from model
+        return Str::plural($this->getLabel());
     }
 
     public function destroy($id)
