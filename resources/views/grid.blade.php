@@ -34,11 +34,12 @@
                                         <option value="{{$filter->name()}}">{{$filter->label()}}</option>
                                     @endforeach
                                 </select>
-                                <button id="addFilter" class="flex-shrink-0 btn btn-light">+ Add</button>
+                                <button id="addFilter" class="flex-shrink-0 btn btn-light">
+                                    + @lang('admin::base.add')</button>
                             </div>
                             <div class="d-flex gap-3">
-                                <button id="resetFilters" class="btn btn-light">Reset</button>
-                                <button id="applyFilters" class="btn btn-primary">Apply</button>
+                                <button id="resetFilters" class="btn btn-light">@lang('admin::base.reset')</button>
+                                <button id="applyFilters" class="btn btn-primary">@lang('admin::base.apply')</button>
                             </div>
                         </div>
                     </div>

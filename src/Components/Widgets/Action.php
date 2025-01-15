@@ -21,10 +21,9 @@ class Action extends Element
 {
     public $view = 'admin::widgets.action';
 
-    public function button()
+    public function button($class = 'btn btn-primary')
     {
-        $this->dom('button');
-        $this->withAttributes(['class' => 'btn btn-primary']);
+        $this->withAttributes(['class' => $class]);
         return $this;
     }
 
@@ -35,19 +34,9 @@ class Action extends Element
         return $this;
     }
 
-    public function asLink()
-    {
-        $this->dom('a');
-        return $this;
-    }
-
     public function danger()
     {
-        if ($this->dom() == 'button') {
-            $this->withAttributes(['class' => 'btn-danger']);
-        } else {
-            $this->withAttributes(['class' => 'text-danger']);
-        }
+        $this->withAttributes(['class' => 'btn-danger text-danger']);
         return $this;
     }
 }

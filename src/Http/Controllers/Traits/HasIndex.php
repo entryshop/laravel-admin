@@ -80,6 +80,8 @@ trait HasIndex
     {
         return [
             Action::make('create')
+                ->button()
+                ->icon('ri-add-line')
                 ->href(admin()->url($this->route . '/create'))
                 ->label(__('admin::base.create')),
         ];
