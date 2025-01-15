@@ -92,7 +92,7 @@ class AdminController
                 return __($lang_key);
             }
         }
-        return $name;
+        return Str::title($name);
     }
 
     /**
