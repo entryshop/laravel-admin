@@ -2,16 +2,26 @@
 
 namespace Entryshop\Admin\Http\Controllers\Traits;
 
+use Entryshop\Admin\Components\Cell;
 use Entryshop\Admin\Components\Form;
 
 trait HasForm
 {
-    public function edit($id)
+    public function edit(...$args)
     {
+        $id = array_pop($args);
+
         $this->layout()
             ->title(__('admin::base.edit') . ' ' . $this->getlabel())
             ->back(admin()->url($this->route));
         return $this->layout()->child($this->form($id))->render();
+    }
+
+    public function update(...$args)
+    {
+        $id = array_pop($args);
+        $this->save($id);
+        return back();
     }
 
     public function create()
@@ -22,69 +32,63 @@ trait HasForm
         return $this->layout()->child($this->form())->render();
     }
 
-    public function form($id = null)
-    {
-        $model  = $this->model($id);
-        $form   = Form::make()
-            ->model($model)
-            ->route($this->route)
-            ->editing(true);
-        $fields = $this->fields($id);
-        $form->fields($fields);
-        return $form;
-    }
-
-    public function fields($id = null)
-    {
-        $editing = (bool)$id;
-        $crud    = $this->crud();
-        $fields  = [];
-        foreach ($crud as $name => $column) {
-            if (is_string($column)) {
-                $column = [
-                    'type' => 'text',
-                    'name' => $column,
-                ];
-            }
-
-            if (is_string($name)) {
-                $column['name'] = $name;
-            }
-
-            if (!($column['form'] ?? true)) {
-                continue;
-            }
-
-            if ($editing && ($column['edit'] ?? true == false)) {
-                continue;
-            }
-
-            if (!$editing && ($column['create'] ?? true == false)) {
-                continue;
-            }
-
-            $fields[] = $this->getField($column);
-        }
-        return $fields;
-    }
-
-    public function save($id = null, $request = null)
-    {
-        $form  = $this->form($id);
-        $model = $form->save($request);
-        $model->save();
-    }
-
-    public function update($id)
-    {
-        $this->save($id);
-        return back();
-    }
-
     public function store()
     {
         $this->save();
         return $this->index();
     }
 
+    protected function form($id = null)
+    {
+        $model  = $this->model($id);
+        $form   = Form::make()
+            ->model($model)
+            ->route($this->route)
+            ->editing(true);
+        $fields = [];
+        foreach ($this->fields($id) as $name => $field) {
+            if (is_string($field)) {
+                $field = [
+                    'type' => 'text',
+                    'name' => $field,
+                ];
+            }
+
+            if (is_string($name)) {
+                $field['name'] = $name;
+            }
+
+            if (is_array($field)) {
+                $field = $this->getField($field);
+            }
+
+            $fields[] = $field;
+        }
+        $form->fields($fields);
+        return $form;
+    }
+
+    protected function fields($id = null)
+    {
+        return [];
+    }
+
+    protected function getField($column)
+    {
+        $column['label'] ??= $this->getLang($column['name']);
+
+        /**
+         * @var Cell $cellClass
+         */
+        $cellClass = Form::$availableFields[$column['type'] ?? 'text'];
+
+        return $cellClass::make($column);
+    }
+
+    protected function save($id = null, $request = null)
+    {
+        $form  = $this->form($id);
+        $model = $form->save($request);
+        $model->save();
+    }
 }

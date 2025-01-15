@@ -67,15 +67,16 @@
                         </span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">
-                                    <i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
-                                    <span class="align-middle">Profile</span>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{route('admin.logout')}}">
-                                    <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
-                                    <span class="align-middle" data-key="t-logout">Logout</span>
-                                </a>
+                                @foreach($_this->userMenus() as $userMenu)
+                                    <a class="dropdown-item" href="{{$userMenu->link()}}">
+                                        @if($icon = $userMenu->icon())
+                                            <i class="{{$icon}} text-muted fs-16 align-middle me-1"></i>
+                                        @endif
+                                        <span class="align-middle" data-key="t-logout">
+                                        {{$userMenu->label()}}</span>
+                                    </a>
+                                @endforeach
+
                             </div>
                         </div>
                     </div>

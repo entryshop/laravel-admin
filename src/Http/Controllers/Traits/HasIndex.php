@@ -2,6 +2,7 @@
 
 namespace Entryshop\Admin\Http\Controllers\Traits;
 
+use Entryshop\Admin\Components\Cell;
 use Entryshop\Admin\Components\Grid;
 use Entryshop\Admin\Components\Table\Columns\Actions;
 use Entryshop\Admin\Components\Widgets\Action;
@@ -16,18 +17,39 @@ trait HasIndex
         return $this->layout()->child($grid)->render();
     }
 
-    public function grid()
+    protected function grid()
     {
         $grid = Grid::make();
 
         $grid->models($this->models());
 
-        $columns = $this->columns();
+        $columns = [];
+
+        foreach ($this->columns() as $name => $column) {
+            if (is_string($column)) {
+                $column = [
+                    'type' => 'text',
+                    'name' => $column,
+                ];
+            }
+
+            if (is_string($name)) {
+                $column['name'] = $name;
+            }
+
+            $cell = $this->getColumn($column);
+
+            if (!empty($cell)) {
+                $columns[] = $cell;
+            }
+        }
+
         if (!empty($actions = $this->actions())) {
             $columns[] = Actions::make()
                 ->label(__('admin::base.actions'))
                 ->children($actions);
         }
+
         $grid->columns($columns);
 
         if (!empty($searches = $this->searches())) {
@@ -44,17 +66,17 @@ trait HasIndex
         return $grid;
     }
 
-    public function searches()
+    protected function searches()
     {
         return [];
     }
 
-    public function filters()
+    protected function filters()
     {
         return [];
     }
 
-    public function tools()
+    protected function tools()
     {
         return [
             Action::make('create')
@@ -63,7 +85,7 @@ trait HasIndex
         ];
     }
 
-    public function actions($view = 'index')
+    protected function actions($view = 'index')
     {
         $actions = [];
         if ($view === 'index') {
@@ -88,31 +110,20 @@ trait HasIndex
         return $actions;
     }
 
-    public function columns()
+    protected function columns()
     {
-        $crud    = $this->crud();
-        $columns = [];
-        foreach ($crud as $name => $column) {
-            if (is_string($column)) {
-                $column = [
-                    'type' => 'text',
-                    'name' => $column,
-                ];
-            }
-            if (is_string($name)) {
-                $column['name'] = $name;
-            }
+        return [];
+    }
 
-            if (!($column['index'] ?? true)) {
-                continue;
-            }
+    protected function getColumn($column)
+    {
+        $column['label'] ??= $this->getLang($column['name']);
 
-            $cell = $this->getColumn($column);
+        /**
+         * @var Cell $cellClass
+         */
+        $cellClass = Grid::$availableColumns[$column['type'] ?? 'text'];
 
-            if (!empty($cell)) {
-                $columns[] = $cell;
-            }
-        }
-        return $columns;
+        return $cellClass::make($column);
     }
 }

@@ -2,9 +2,6 @@
 
 namespace Entryshop\Admin\Http\Controllers;
 
-use Entryshop\Admin\Components\Cell;
-use Entryshop\Admin\Components\Form;
-use Entryshop\Admin\Components\Grid;
 use Entryshop\Admin\Components\Layout;
 use Entryshop\Admin\Concerns\CanCallMethods;
 use Entryshop\Admin\Concerns\HasVariables;
@@ -40,17 +37,6 @@ class AdminController
         $this->callMethods('setup');
     }
 
-    /**
-     * @param  string  $view  current controller handler index|show|edit|create
-     * @return array
-     */
-    public function crud($view = null)
-    {
-        return [
-            'id',
-        ];
-    }
-
     public function model($id = null)
     {
         if (empty($id)) {
@@ -80,30 +66,6 @@ class AdminController
             ]);
         }
         return back();
-    }
-
-    protected function getColumn($column)
-    {
-        $column['label'] ??= $this->getLang($column['name']);
-
-        /**
-         * @var Cell $cellClass
-         */
-        $cellClass = Grid::$availableColumns[$column['type'] ?? 'text'];
-
-        return $cellClass::make($column);
-    }
-
-    protected function getField($column)
-    {
-        $column['label'] ??= $this->getLang($column['name']);
-
-        /**
-         * @var Cell $cellClass
-         */
-        $cellClass = Form::$availableFields[$column['type'] ?? 'text'];
-
-        return $cellClass::make($column);
     }
 
     protected function getLang($name)

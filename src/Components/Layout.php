@@ -24,4 +24,11 @@ class Layout extends Element
         }
         return $this;
     }
+
+    public function getDefaultUserMenus()
+    {
+        return [
+            Menu::make('logout', 'Logout')->link(route('admin.logout'))->icon('ri-logout-box-r-line'),
+        ];
+    }
 }

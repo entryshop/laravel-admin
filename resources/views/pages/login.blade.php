@@ -33,17 +33,14 @@
                 <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="card mt-4 card-bg-fill">
                         <div class="card-body p-4">
-                            <div class="text-center mt-2">
-                                <h5 class="text-primary">Welcome Back !</h5>
-                            </div>
                             <div class="p-2 mt-4">
                                 @include('admin::partials.errors')
                                 <form action="{{route('admin.login.submit')}}" method="post">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="username" class="form-label">@lang('admin::auth.username')</label>
-                                        <input type="text" class="form-control" name="username"
-                                               placeholder="@lang('admin::auth.username')">
+                                        <label for="{{admin()->username()}}" class="form-label">{{admin()->usernameLabel()}}</label>
+                                        <input type="text" class="form-control" name="{{admin()->username()}}"
+                                               placeholder="{{admin()->usernameLabel()}}">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label"

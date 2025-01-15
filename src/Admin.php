@@ -29,6 +29,16 @@ class Admin
         return $this->url('/');
     }
 
+    public function getDefaultUsername()
+    {
+        return 'username';
+    }
+
+    public function getDefaultUsernameLabel()
+    {
+        return __('admin::auth.username');
+    }
+
     public function url($path)
     {
         if (Str::startsWith($path, '/')) {
