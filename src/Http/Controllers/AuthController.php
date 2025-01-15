@@ -14,15 +14,13 @@ class AuthController
 
     public function submitLogin()
     {
+        $username = admin()->username();
         request()->validate([
-            'username' => 'required',
+            $username  => 'required',
             'password' => 'required',
         ]);
 
-        if (auth('admin')->attempt([
-            'username' => request('username'),
-            'password' => request('password'),
-        ])) {
+        if (auth('admin')->attempt(request()->only($username, 'password'))) {
             return redirect()->intended(admin()->home());
         }
 
