@@ -62,6 +62,10 @@ trait HasForm
                 $field = $this->getField($field);
             }
 
+            if (!$field->getOriginal('label')) {
+                $field->label($this->getLang($field->name()));
+            }
+
             $fields[] = $field;
         }
         $form->fields($fields);
@@ -75,8 +79,6 @@ trait HasForm
 
     protected function getField($column)
     {
-        $column['label'] ??= $this->getLang($column['name']);
-
         /**
          * @var Cell $cellClass
          */

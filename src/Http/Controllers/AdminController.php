@@ -58,7 +58,14 @@ class AdminController
 
     protected function getLabel()
     {
-        // get name from model
+        // get label from lang
+        $label = $this->getLang('label');
+
+        if (!Str::is($label, 'label', true)) {
+            return $label;
+        }
+
+        // guess label from model
         if (is_string($this->model)) {
             return Str::title(class_basename($this->model));
         }
@@ -67,7 +74,12 @@ class AdminController
 
     protected function getLabelPlural()
     {
-        // get name from model
+        // get label from lang
+        $label = $this->getLang('label_plural');
+        if (!Str::is($label, 'label_plural', true)) {
+            return $label;
+        }
+
         return Str::plural($this->getLabel());
     }
 
@@ -92,7 +104,7 @@ class AdminController
                 return __($lang_key);
             }
         }
-        return Str::title($name);
+        return Str::ucfirst($name);
     }
 
     /**

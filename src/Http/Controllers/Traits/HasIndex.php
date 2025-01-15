@@ -11,9 +11,9 @@ trait HasIndex
 {
     public function index()
     {
-        admin()->title($this->getlabel());
+        admin()->title($this->getLabelPlural());
         $grid = $this->grid();
-        $this->layout()->title($this->getlabel());
+        $this->layout()->title($this->getLabelPlural());
         return $this->layout()->child($grid)->render();
     }
 

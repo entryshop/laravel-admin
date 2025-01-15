@@ -1,6 +1,8 @@
 <div class="card">
     <div class="card-header">
-        @lang('admin::base.detail')
+        <h6 class="card-title mb-0">
+            @lang('admin::base.detail')
+        </h6>
     </div>
     <div class="card-body">
         <div class="d-flex gap-3 flex-wrap">
