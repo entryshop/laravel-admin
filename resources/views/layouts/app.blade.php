@@ -52,12 +52,13 @@
                             </button>
                         </div>
 
-                        <div class="dropdown ms-sm-3 header-item topbar-user">
-                            <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @auth()
+                            <div class="dropdown ms-sm-3 header-item topbar-user">
+                                <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             <img class="rounded-circle header-profile-user"
-                                 src="{{auth()->user()->avatar}}"
+                                 src="{{auth()->user()->avatar??admin()->asset('/images/users/user-dummy-img.jpg')}}"
                                  alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
@@ -65,20 +66,21 @@
                                 </span>
                             </span>
                         </span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                @foreach($_this->userMenus() as $userMenu)
-                                    <a class="dropdown-item" href="{{$userMenu->link()}}">
-                                        @if($icon = $userMenu->icon())
-                                            <i class="{{$icon}} text-muted fs-16 align-middle me-1"></i>
-                                        @endif
-                                        <span class="align-middle" data-key="t-logout">
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    @foreach($_this->userMenus() as $userMenu)
+                                        <a class="dropdown-item" href="{{$userMenu->link()}}">
+                                            @if($icon = $userMenu->icon())
+                                                <i class="{{$icon}} text-muted fs-16 align-middle me-1"></i>
+                                            @endif
+                                            <span class="align-middle" data-key="t-logout">
                                         {{$userMenu->label()}}</span>
-                                    </a>
-                                @endforeach
+                                        </a>
+                                    @endforeach
 
+                                </div>
                             </div>
-                        </div>
+                        @endauth
                     </div>
                 </div>
             </div>
