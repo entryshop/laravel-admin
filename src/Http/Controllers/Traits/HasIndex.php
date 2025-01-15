@@ -68,7 +68,7 @@ trait HasIndex
 
     protected function searches()
     {
-        return [];
+        return ['id'];
     }
 
     protected function filters()
