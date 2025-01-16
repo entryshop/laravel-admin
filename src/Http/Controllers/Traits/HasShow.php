@@ -29,7 +29,7 @@ trait HasShow
         $show->details($details);
         $this->layout()
             ->title($this->getlabel() . ' ' . __('admin::base.detail'))
-            ->back(admin()->url($this->route));
+            ->back(admin()->url($this->getRoute()));
         return $this->layout()->child($show);
     }
 

@@ -47,6 +47,19 @@ class AdminController
         return $this->model::find($id);
     }
 
+    protected function getRoute()
+    {
+        if (!empty($this->route)) {
+            return $this->route;
+        }
+
+        if (!empty($this->model)) {
+            return Str::lower(Str::plural(class_basename($this->model)));
+        }
+
+        return '';
+    }
+
     protected function models()
     {
         if (is_string($this->model)) {
@@ -98,12 +111,15 @@ class AdminController
 
     protected function getLang($name)
     {
-        if (!empty($this->lang)) {
-            $lang_key = $this->lang . '.' . $name;
-            if (Lang::has($lang_key)) {
-                return __($lang_key);
-            }
+        if (empty($this->lang)) {
+            $this->lang = Str::lower(Str::plural(class_basename($this->model)));
         }
+
+        $lang_key = $this->lang . '.' . $name;
+        if (Lang::has($lang_key)) {
+            return __($lang_key);
+        }
+
         return Str::ucfirst($name);
     }
 

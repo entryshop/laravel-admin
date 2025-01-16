@@ -13,7 +13,7 @@ trait HasForm
 
         $this->layout()
             ->title(__('admin::base.edit') . ' ' . $this->getlabel())
-            ->back(admin()->url($this->route));
+            ->back(admin()->url($this->getRoute()));
         return $this->layout()->child($this->form($id))->render();
     }
 
@@ -29,7 +29,7 @@ trait HasForm
     {
         $this->layout()
             ->title(__('admin::base.create') . ' ' . $this->getlabel())
-            ->back(admin()->url($this->route));
+            ->back(admin()->url($this->getRoute()));
         return $this->layout()->child($this->form())->render();
     }
 
@@ -45,7 +45,7 @@ trait HasForm
         $model  = $this->model($id);
         $form   = Form::make()
             ->model($model)
-            ->route($this->route)
+            ->route($this->getRoute())
             ->editing(true);
         $fields = [];
         foreach ($this->fields($id) as $name => $field) {

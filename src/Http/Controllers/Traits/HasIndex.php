@@ -78,7 +78,7 @@ trait HasIndex
 
     protected function searches()
     {
-        return ['id'];
+        return ['*'];
     }
 
     protected function filters()
@@ -92,7 +92,7 @@ trait HasIndex
             Action::make('create')
                 ->button()
                 ->icon('ri-add-line')
-                ->href(admin()->url($this->route . '/create'))
+                ->href(admin()->url($this->getRoute() . '/create'))
                 ->label(__('admin::base.create')),
         ];
     }
@@ -103,17 +103,17 @@ trait HasIndex
         if ($view === 'index') {
             if ($this->index_actions['view']) {
                 $actions[] = Action::make(label: __('admin::base.view'))
-                    ->href(admin()->url($this->route . '/{model.id}'));
+                    ->href(admin()->url($this->getRoute() . '/{model.id}'));
             }
 
             if ($this->index_actions['edit']) {
                 $actions[] = Action::make(label: __('admin::base.edit'))
-                    ->href(admin()->url($this->route . '/{model.id}/edit'));
+                    ->href(admin()->url($this->getRoute() . '/{model.id}/edit'));
             }
 
             if ($this->index_actions['delete']) {
                 $actions[] = Action::make(label: __('admin::base.delete'))
-                    ->action(admin()->url($this->route . '/{model.id}'))
+                    ->action(admin()->url($this->getRoute() . '/{model.id}'))
                     ->danger()
                     ->confirm('你确定要删除吗?')
                     ->method('delete');

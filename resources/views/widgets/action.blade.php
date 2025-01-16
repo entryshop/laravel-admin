@@ -4,9 +4,8 @@
     $dom = $_this->get('dom', 'a');
 @endphp
 
-<a @if($href)
-       target="{{$_this->get('target')}}" href="{{$href}}"
-   @endif
+<a role="button" id="{{$_this->id()}}"
+   @if($href) target="{{$_this->get('target')}}" href="{{$href}}" @endif
    {!! $_this->attributes !!}
    @if($action)
        data-action="{{$action}}" data-method="{{$_this->get('method')}}"

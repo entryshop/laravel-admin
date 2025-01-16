@@ -10,6 +10,8 @@ use Entryshop\Admin\Components\Table\Columns;
 use Entryshop\Admin\Components\Table\Table;
 use Entryshop\Admin\Concerns\HasChildren;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * @method self|array|Builder models($value = null)
@@ -101,6 +103,11 @@ class Grid extends Element
             if (!empty($search_keyword)) {
                 $this->models->where(function ($query) use ($search, $search_keyword) {
                     foreach ($search as $field) {
+                        if ($field === '*') {
+                            $columns        = Schema::getColumnListing($query->from);
+                            $columns_string = implode(',', $columns);
+                            $field          = DB::raw('CONCAT(' . $columns_string . ')');
+                        }
                         $query->orWhere($field, 'like', "%{$search_keyword}%");
                     }
                 });
