@@ -75,4 +75,9 @@ class Element
             '_this' => $this,
         ]);
     }
+
+    public function __toString()
+    {
+        return $this->render();
+    }
 }

@@ -6,23 +6,13 @@ use Entryshop\Admin\Components\Show;
 
 trait HasShow
 {
-    public function show($id)
+    public function show(...$args)
     {
+        $id      = array_pop($args);
         $model   = $this->model($id);
         $show    = Show::make()->model($model);
-        $details = $this->detail();
-        $show->details($details);
-        $this->layout()
-            ->title($this->getlabel() . ' ' . __('admin::base.detail'))
-            ->back(admin()->url($this->route));
-        return $this->layout()->child($show)->render();
-    }
-
-    public function detail()
-    {
-        $crud    = $this->crud('show');
-        $columns = [];
-        foreach ($crud as $name => $column) {
+        $details = [];
+        foreach ($this->detail() as $name => $column) {
             if (is_string($column)) {
                 $column = [
                     'type' => 'text',
@@ -33,13 +23,19 @@ trait HasShow
                 $column['name'] = $name;
             }
 
-            if (!($column['show'] ?? true)) {
-                continue;
-            }
-
-            $columns[] = $this->getColumn($column);
+            $details[] = $this->getColumn($column);
         }
-        return $columns;
+
+        $show->details($details);
+        $this->layout()
+            ->title($this->getlabel() . ' ' . __('admin::base.detail'))
+            ->back(admin()->url($this->route));
+        return $this->layout()->child($show);
+    }
+
+    protected function detail()
+    {
+        return [];
     }
 
 }

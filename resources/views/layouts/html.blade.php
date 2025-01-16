@@ -45,6 +45,7 @@
 <script src="{{admin()->asset('libs/feather-icons/feather.min.js')}}"></script>
 <script src="{{admin()->asset('libs/choices.js/public/assets/scripts/choices.min.js ')}}"></script>
 <script src="{{admin()->asset('libs/flatpickr/flatpickr.min.js')}}"></script>
+<script src="{{admin()->asset('libs/toastify-js/src/toastify.js')}}"></script>
 <!-- App js -->
 <script src="{{admin()->asset('js/app.js')}}"></script>
 <script src="{{admin()->asset('js/admin.js')}}"></script>
@@ -52,5 +53,6 @@
 <script nonce="{{admin()->csp()}}">
     {!! $_this->scripts() !!}
 </script>
+@include('admin::partials.toasts')
 </body>
 </html>

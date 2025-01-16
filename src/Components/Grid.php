@@ -9,9 +9,10 @@ use Entryshop\Admin\Components\Form\Form;
 use Entryshop\Admin\Components\Table\Columns;
 use Entryshop\Admin\Components\Table\Table;
 use Entryshop\Admin\Concerns\HasChildren;
+use Illuminate\Database\Query\Builder;
 
 /**
- * @method self|array models($value = null)
+ * @method self|array|Builder models($value = null)
  * @method self|array search($value = null)
  * @method self|array columns($value = null)
  * @method self|array batch($value = null)
@@ -157,7 +158,7 @@ class Grid extends Element
             $_table->columns($columns);
         }
 
-        $_table->selectable(true);
+        $_table->selectable(!empty($this->batch()));
 
         $this->set('table', $_table);
 

@@ -63,7 +63,17 @@ trait HasIndex
         if (!empty($tools = $this->tools())) {
             $grid->tools($tools);
         }
+
+        if (!empty($order = $this->order())) {
+            $grid->models()->orderBy($order[0] ?? null, $order[1] ?? null);
+        }
+
         return $grid;
+    }
+
+    protected function order()
+    {
+        return [];
     }
 
     protected function searches()

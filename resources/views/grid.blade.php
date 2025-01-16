@@ -54,7 +54,7 @@
                     @endforeach
                 </div>
                 <div>
-                    取消选择
+                    @lang('admin::base.cancel_select')
                 </div>
             </div>
         </div>
@@ -65,6 +65,8 @@
                 {{render($table)}}
             </div>
         @endif
+    </div>
+    <div class="card-footer pb-0">
         {!! $_this->models()->links() !!}
     </div>
 </div>

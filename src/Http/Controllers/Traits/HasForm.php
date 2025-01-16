@@ -21,6 +21,7 @@ trait HasForm
     {
         $id = array_pop($args);
         $this->save($id);
+        admin()->success(__('admin::base.update_success'));
         return back();
     }
 
@@ -35,6 +36,7 @@ trait HasForm
     public function store()
     {
         $this->save();
+        admin()->success(__('admin::base.saved_success'));
         return $this->index();
     }
 

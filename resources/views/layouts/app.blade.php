@@ -9,18 +9,18 @@
                         <div class="navbar-brand-box horizontal-logo">
                             <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{{admin()->asset('images/logo-sm.png')}}" alt="" height="22">
+                                    <img src="{{admin()->miniLogo()}}" alt="" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{admin()->asset('images/logo-dark.png')}}" alt="" height="17">
+                                    <img src="{{admin()->logo()}}" alt="" height="17">
                                 </span>
                             </a>
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{{admin()->asset('images/logo-sm.png')}}" alt="" height="22">
+                                    <img src="{{admin()->miniLogo()}}" alt="" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{admin()->asset('images/logo-light.png')}}" alt="" height="17">
+                                    <img src="{{admin()->logo()}}" alt="" height="17">
                                 </span>
                             </a>
                         </div>
@@ -34,7 +34,6 @@
                                 </span>
                         </button>
                     </div>
-
                     <div class="d-flex align-items-center">
 
                         <div class="ms-1 header-item d-none d-sm-flex">
@@ -42,13 +41,6 @@
                                     class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
                                     data-toggle="fullscreen">
                                 <i class='bx bx-fullscreen fs-22'></i>
-                            </button>
-                        </div>
-
-                        <div class="ms-1 header-item d-none d-sm-flex">
-                            <button type="button"
-                                    class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
-                                <i class='bx bx-moon fs-22'></i>
                             </button>
                         </div>
 
@@ -91,19 +83,19 @@
             <div class="navbar-brand-box">
                 <a href="#" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{admin()->asset('images/logo-sm.png')}}" alt="" height="22">
+                        <img src="{{admin()->miniLogo()}}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{admin()->asset('images/logo-dark.png')}}" alt="" height="17">
+                        <img src="{{admin()->logo()}}" alt="" height="17">
                     </span>
                 </a>
                 <!-- Light Logo-->
                 <a href="#" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{admin()->asset('images/logo-sm.png')}}" alt="" height="22">
+                        <img src="{{admin()->miniLogo()}}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{admin()->asset('images/logo-light.png')}}" alt="" height="17">
+                        <img src="{{admin()->logo()}}" alt="" height="17">
                     </span>
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -137,14 +129,16 @@
                             <div class="col-12">
                                 <div
                                     class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                                    <h4 class="mb-sm-0">
+                                    <h4 class="mb-sm-0 d-flex align-items-center gap-2">
                                         @if($back = $_this->back())
-                                            <a href="{{$back}}"><i class="ri-arrow-left-line"></i></a>
+                                            <a href="{{$back}}" class="text-black badge bg-light">
+                                                <i class="ri-arrow-left-line"></i>
+                                            </a>
                                         @endif
-                                        {{$title}}
+                                        <span>{!! $title !!}</span>
                                     </h4>
                                     <div class="page-title-right">
-                                        {{$_this->title_right()}}
+                                        {!! $_this->title_right() !!}
                                     </div>
                                 </div>
                             </div>

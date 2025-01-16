@@ -12,7 +12,7 @@
                         <small>{{$detail->label()}}</small>
                     </label>
                     <div>
-                        {!! render($detail, ['model' => $_this->model()]) !!}
+                        {!! $detail->model($_this->model())->render() !!}
                     </div>
                 </div>
             @endforeach

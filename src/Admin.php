@@ -4,6 +4,7 @@ namespace Entryshop\Admin;
 
 use Entryshop\Admin\Components\Layout;
 use Entryshop\Admin\Components\Widgets\Container;
+use Entryshop\Admin\Concerns\HasToasts;
 use Entryshop\Admin\Concerns\HasVariables;
 use Entryshop\Admin\Concerns\InteractsWithEvents;
 use Entryshop\Admin\Http\Controllers\AuthController;
@@ -20,6 +21,7 @@ class Admin
 {
     use InteractsWithEvents;
     use HasVariables;
+    use HasToasts;
 
     protected Layout $layout;
 
