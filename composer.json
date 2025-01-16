@@ -1,5 +1,5 @@
 {
-    "name": "entryshop/admin",
+    "name": "entryshop/laravel-admin",
     "version": "0.0.2",
     "autoload": {
         "psr-4": {
