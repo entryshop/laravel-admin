@@ -11,7 +11,7 @@ use Entryshop\Admin\Http\Controllers\Traits\HasShow;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Lang;
-use Str;
+use Illuminate\Support\Str;
 
 class AdminController
 {

@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'prefix' => 'admin',
-    'auth'   => [
+    'routes_enabled' => true,
+    'prefix'         => 'admin',
+    'auth'           => [
         'guards'    => [
             'admin' => [
                 'driver'   => 'session',

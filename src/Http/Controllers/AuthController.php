@@ -15,6 +15,7 @@ class AuthController
     public function submitLogin()
     {
         $username = admin()->username();
+
         request()->validate([
             $username  => 'required',
             'password' => 'required',

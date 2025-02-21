@@ -4,16 +4,71 @@
     $dom = $_this->get('dom', 'a');
 @endphp
 
-<a role="button" id="{{$_this->id()}}"
-   @if($href) target="{{$_this->get('target')}}" href="{{$href}}" @endif
+<a role="button"
+   id="{{$_this->id()}}"
    {!! $_this->attributes !!}
+
+   @if($href)
+       target="{{$_this->get('target')}}" href="{{$href}}"
+   @endif
+
    @if($action)
-       data-action="{{$action}}" data-method="{{$_this->get('method')}}"
+       data-action="{{$action}}"
+   data-method="{{$_this->get('method')}}"
    data-confirm="{{$_this->get('confirm')}}"
-        @endif
+   @endif
+
+   @if($_this->get('ajax'))
+       data-bs-toggle="modal" data-bs-target="#{{$_this->id()}}-modal"
+    @endif
+
 >
     @if($_this->icon())
         <i class="{{$_this->icon()}}"></i>
     @endif
     {!! $_this->label() !!}
 </a>
+
+@if($_this->get('ajax'))
+    <div id="{{$_this->id()}}-modal" class="modal fade"
+         tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modal Heading</h5>
+                    <span class="ms-1 btn-refresh" type="button" aria-label="Refresh"><i
+                            class="ri-refresh-line"></i></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @pushonce('scripts')
+        <script nonce="{{admin()->csp()}}">
+            function getRenderContent(element, id) {
+                $.get('/admin/render?_nonce={{admin()->csp()}}&&element=' + element).then(function (data) {
+                    $('#' + id + '-modal .modal-body').html(data);
+                });
+            }
+        </script>
+    @endpushonce
+    @push('scripts')
+        <script nonce="{{admin()->csp()}}">
+            let content_loaded_{{$_this->id()}} = false;
+            $('#{{$_this->id()}}').on('click', function () {
+                if (!content_loaded_{{$_this->id()}}) {
+                    getRenderContent("{{urlencode($_this->get('ajax'))}}", "{{$_this->id()}}");
+                    content_loaded_{{$_this->id()}} = true;
+                }
+                $('#{{$_this->id()}}-modal').modal('show');
+            });
+
+            $('#{{$_this->id()}}-modal .btn-refresh').on('click', function () {
+                getRenderContent("{{urlencode($_this->get('ajax'))}}", "{{$_this->id()}}");
+            });
+        </script>
+    @endpush
+@endif

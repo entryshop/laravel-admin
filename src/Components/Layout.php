@@ -2,6 +2,7 @@
 
 namespace Entryshop\Admin\Components;
 
+use Entryshop\Admin\Components\Widgets\Menu;
 use Entryshop\Admin\Concerns\HasChildren;
 
 /**

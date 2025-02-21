@@ -4,6 +4,8 @@ namespace Entryshop\Admin;
 
 use Entryshop\Admin\Components\Layout;
 use Entryshop\Admin\Components\Widgets\Container;
+use Entryshop\Admin\Concerns\HasAssets;
+use Entryshop\Admin\Concerns\HasAttributes;
 use Entryshop\Admin\Concerns\HasRoutes;
 use Entryshop\Admin\Concerns\HasToasts;
 use Entryshop\Admin\Concerns\HasVariables;
@@ -18,6 +20,8 @@ class Admin
     use HasVariables;
     use HasToasts;
     use HasRoutes;
+    use HasAttributes;
+    use HasAssets;
 
     protected Layout $layout;
 

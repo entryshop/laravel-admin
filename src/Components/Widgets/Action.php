@@ -10,22 +10,16 @@ use Entryshop\Admin\Components\Element;
  * @method self href($value = null)
  * @method self target($value = null)
  * @method self color($value = null)
- * @method self form($value = null)
  * @method self reload($value = null)
  * @method self action($value = null)
  * @method self method($value = null)
  * @method self confirm($value = null)
+ * @method self ajax($value = null)
  * @method self dom($value = null)
  */
 class Action extends Element
 {
     public $view = 'admin::widgets.action';
-
-    public function button($class = 'btn btn-primary')
-    {
-        $this->withAttributes(['class' => $class]);
-        return $this;
-    }
 
     public function post($action = null)
     {
@@ -34,9 +28,4 @@ class Action extends Element
         return $this;
     }
 
-    public function danger()
-    {
-        $this->withAttributes(['class' => 'btn-danger text-danger']);
-        return $this;
-    }
 }

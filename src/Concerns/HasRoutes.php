@@ -52,8 +52,9 @@ trait HasRoutes
     {
         $params = [
             'prefix'     => config('admin.prefix'),
-            'middleware' => [ServeAdmin::class],
+            'middleware' => ['web', ServeAdmin::class],
         ];
+
         if (is_array($args[0])) {
             $params   = array_merge($params, $args[0]);
             $callback = $args[1];
@@ -66,14 +67,18 @@ trait HasRoutes
     public function routes($auth = true, $api = true)
     {
         if ($api) {
-            Route::post('render-element', RenderElementController::class)->name('admin.api.render.element');
-            Route::post('form-submit', FormSubmitController::class)->name('admin.api.form.submit');
+            $this->group(function () {
+                Route::post('render-element', RenderElementController::class)->name('admin.api.render.element');
+                Route::post('form-submit', FormSubmitController::class)->name('admin.api.form.submit');
+            });
         }
 
         if ($auth) {
-            Route::get('login', [AuthController::class, 'login'])->name('login');
-            Route::post('login', [AuthController::class, 'submitLogin'])->name('admin.login.submit');
-            Route::any('logout', [AuthController::class, 'logout'])->name('admin.logout');
+            $this->group(function () {
+                Route::get('login', [AuthController::class, 'login'])->name('admin.login');
+                Route::post('login', [AuthController::class, 'submitLogin'])->name('admin.login.submit');
+                Route::any('logout', [AuthController::class, 'logout'])->name('admin.logout');
+            });
         }
     }
 
@@ -90,5 +95,10 @@ trait HasRoutes
     public function getDefaultUsernameLabel()
     {
         return __('admin::auth.username');
+    }
+
+    public function getDefaultLoginUrl()
+    {
+        return route('admin.login');
     }
 }

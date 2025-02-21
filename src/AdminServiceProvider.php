@@ -17,7 +17,13 @@ class AdminServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'admin');
+
+        if (config('admin.routes_enabled')) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
+        }
+
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'admin');
+
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__ . '/../resources/assets' => public_path('vendor/admin')], 'admin-assets');
         }

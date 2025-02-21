@@ -37,10 +37,12 @@ trait HasIndex
                 $column['name'] = $name;
             }
 
-            $cell = $this->getColumn($column);
+            if (is_array($column)) {
+                $column = $this->getColumn($column);
+            }
 
-            if (!empty($cell)) {
-                $columns[] = $cell;
+            if (!empty($column)) {
+                $columns[] = $column;
             }
         }
 
@@ -90,8 +92,8 @@ trait HasIndex
     {
         return [
             Action::make('create')
-                ->button()
                 ->icon('ri-add-line')
+                ->class('btn btn-primary')
                 ->href(admin()->url($this->getRoute() . '/create'))
                 ->label(__('admin::base.create')),
         ];
@@ -103,19 +105,24 @@ trait HasIndex
         if ($view === 'index') {
             if ($this->index_actions['view']) {
                 $actions[] = Action::make(label: __('admin::base.view'))
+                    ->class('btn btn-xs btn-ghost-primary')
+                    ->icon('ri-eye-line')
                     ->href(admin()->url($this->getRoute() . '/{model.id}'));
             }
 
             if ($this->index_actions['edit']) {
                 $actions[] = Action::make(label: __('admin::base.edit'))
+                    ->icon('ri-edit-line')
+                    ->class('btn btn-xs btn-ghost-primary')
                     ->href(admin()->url($this->getRoute() . '/{model.id}/edit'));
             }
 
             if ($this->index_actions['delete']) {
                 $actions[] = Action::make(label: __('admin::base.delete'))
                     ->action(admin()->url($this->getRoute() . '/{model.id}'))
-                    ->danger()
-                    ->confirm('你确定要删除吗?')
+                    ->icon('ri-delete-bin-line')
+                    ->class('btn btn-xs btn-ghost-danger')
+                    ->confirm(__('admin::base.confirm_delete'))
                     ->method('delete');
             }
         }

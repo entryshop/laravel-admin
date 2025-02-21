@@ -43,3 +43,8 @@
         </div>
     @endif
 </form>
+
+@push('scripts')
+    <script nonce="{{admin()->csp()}}">
+    </script>
+@endpush

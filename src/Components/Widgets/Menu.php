@@ -1,7 +1,8 @@
 <?php
 
-namespace Entryshop\Admin\Components;
+namespace Entryshop\Admin\Components\Widgets;
 
+use Entryshop\Admin\Components\Cell;
 use Entryshop\Admin\Concerns\HasChildren;
 
 /**
@@ -12,5 +13,5 @@ class Menu extends Cell
 {
     use HasChildren;
 
-    public $view = 'admin::menu';
+    public $view = 'admin::widgets.menu';
 }

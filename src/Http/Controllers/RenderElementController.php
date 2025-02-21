@@ -11,7 +11,9 @@ class RenderElementController
         $element    = request('element');
         $payload    = request('payload');
         $renderable = app($element);
-        $renderable->payload($payload ?? []);
+        if (method_exists($renderable, 'payload')) {
+            $renderable->payload($payload ?? []);
+        }
         $container = Ajax::make();
         $container->child($renderable);
         return $container->render();

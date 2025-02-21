@@ -1,2 +1,9 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
 
-/*# sourceMappingURL=custom.min.css.map */
+.btn-xs {
+    font-size: .7rem;
+    padding: .15rem .35rem
+}
