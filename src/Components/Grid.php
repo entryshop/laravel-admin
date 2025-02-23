@@ -12,6 +12,7 @@ use Entryshop\Admin\Concerns\HasChildren;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Str;
 
 /**
  * @method self|array|Builder models($value = null)
@@ -37,8 +38,8 @@ class Grid extends Element
     ];
 
     public static $availableFilters = [
-        'text_filter' => Filters\Text::class,
-        'date_filter' => Filters\Date::class,
+        'text' => Filters\Text::class,
+        'date' => Filters\Date::class,
     ];
 
     public function __call($method, $parameters)
@@ -51,12 +52,15 @@ class Grid extends Element
             return $this;
         }
 
-        if (in_array($method, array_keys(static::$availableFilters))) {
-            /** @var Filter $filterClass */
-            $filterClass = static::$availableFilters[$method];
-            $filter      = $filterClass::make(...$parameters);
-            $this->filter($filter);
-            return $this;
+        if (Str::endsWith($method, '_filter')) {
+            $method = Str::beforeLast($method, '_filter');
+            if (in_array($method, array_keys(static::$availableFilters))) {
+                /** @var Filter $filterClass */
+                $filterClass = static::$availableFilters[$method];
+                $filter      = $filterClass::make(...$parameters);
+                $this->filter($filter);
+                return $this;
+            }
         }
 
         return parent::__call($method, $parameters);

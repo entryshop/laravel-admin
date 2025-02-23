@@ -2,9 +2,6 @@
 
 namespace Entryshop\Admin\Concerns;
 
-use Entryshop\Admin\Http\Controllers\AuthController;
-use Entryshop\Admin\Http\Controllers\FormSubmitController;
-use Entryshop\Admin\Http\Controllers\RenderElementController;
 use Entryshop\Admin\Http\Middlewares\ServeAdmin;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -52,6 +49,7 @@ trait HasRoutes
     {
         $params = [
             'prefix'     => config('admin.prefix'),
+            'as'         => 'admin.',
             'middleware' => ['web', ServeAdmin::class],
         ];
 
@@ -64,24 +62,6 @@ trait HasRoutes
         Route::group($params, $callback);
     }
 
-    public function routes($auth = true, $api = true)
-    {
-        if ($api) {
-            $this->group(function () {
-                Route::post('render-element', RenderElementController::class)->name('admin.api.render.element');
-                Route::post('form-submit', FormSubmitController::class)->name('admin.api.form.submit');
-            });
-        }
-
-        if ($auth) {
-            $this->group(function () {
-                Route::get('login', [AuthController::class, 'login'])->name('admin.login');
-                Route::post('login', [AuthController::class, 'submitLogin'])->name('admin.login.submit');
-                Route::any('logout', [AuthController::class, 'logout'])->name('admin.logout');
-            });
-        }
-    }
-
     public function getDefaultHome()
     {
         return $this->url('/');
@@ -89,7 +69,7 @@ trait HasRoutes
 
     public function getDefaultUsername()
     {
-        return 'username';
+        return 'email';
     }
 
     public function getDefaultUsernameLabel()

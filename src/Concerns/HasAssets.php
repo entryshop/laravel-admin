@@ -27,7 +27,6 @@ trait HasAssets
     {
         return [
             $this->asset('js/layout.js'),
-            $this->asset('libs/jquerymy/sugar.min.js'),
             $this->asset('libs/jquery/jquery.min.js'),
             $this->asset('libs/bootstrap/js/bootstrap.bundle.min.js'),
             $this->asset('libs/simplebar/simplebar.min.js'),
@@ -37,7 +36,6 @@ trait HasAssets
             $this->asset('libs/flatpickr/flatpickr.min.js'),
             $this->asset('libs/toastify-js/src/toastify.js'),
             $this->asset('libs/choices.js/public/assets/scripts/choices.min.js'),
-            $this->asset('libs/jquerymy/jquery.my.js'),
             $this->asset('js/app.js'),
             $this->asset('js/admin.js'),
         ];

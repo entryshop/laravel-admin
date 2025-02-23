@@ -25,11 +25,6 @@ class AdminController
     public $model;
     public $route;
     public $lang;
-    public $index_actions = [
-        'view'   => true,
-        'edit'   => true,
-        'delete' => true,
-    ];
 
     protected $layout;
 
@@ -38,81 +33,66 @@ class AdminController
         $this->callMethods('setup');
     }
 
-    protected function model($id = null)
+    protected function getModelClass()
     {
-        if (empty($id)) {
-            return new $this->model;
-        }
-
-        return $this->model::find($id);
+        return $this->model ?? 'App\\Models\\' . $this->guessModelClass();
     }
 
-    protected function getRoute()
+    protected function guessModelClass()
     {
-        if (!empty($this->route)) {
-            return $this->route;
+        $class = class_basename($this);
+        return Str::replace('Controller', '', $class);
+    }
+
+    protected function model($id = null)
+    {
+        $model_class = $this->getModelClass();
+
+        if (empty($id)) {
+            return new $model_class;
         }
 
-        if (!empty($this->model)) {
-            return Str::lower(Str::plural(class_basename($this->model)));
-        }
-
-        return '';
+        return $this->getModelClass()::find($id);
     }
 
     protected function models()
     {
-        if (is_string($this->model)) {
-            return $this->model::query();
+        if (is_string($this->getModelClass())) {
+            return $this->getModelClass()::query();
         }
 
         return $this->model;
     }
 
+    protected function getRoute()
+    {
+        return $this->route ?? Str::lower(Str::plural($this->guessModelClass()));
+    }
+
     protected function getLabel()
     {
-        // get label from lang
         $label = $this->getLang('label');
 
         if (!Str::is($label, 'label', true)) {
             return $label;
         }
 
-        // guess label from model
-        if (is_string($this->model)) {
-            return Str::title(class_basename($this->model));
-        }
-        return '';
+        return Str::title(class_basename($this->getModelClass()));
     }
 
     protected function getLabelPlural()
     {
-        // get label from lang
         $label = $this->getLang('label_plural');
         if (!Str::is($label, 'label_plural', true)) {
             return $label;
         }
-
         return Str::plural($this->getLabel());
-    }
-
-    public function destroy($id)
-    {
-        $model = $this->model::find($id);
-        $model->delete();
-        if (request()->ajax()) {
-            return admin()->response([
-                'success' => true,
-                'action'  => 'reload',
-            ]);
-        }
-        return back();
     }
 
     protected function getLang($name)
     {
         if (empty($this->lang)) {
-            $this->lang = Str::lower(Str::plural(class_basename($this->model)));
+            $this->lang = Str::lower($this->guessModelClass());
         }
 
         $lang_key = $this->lang . '.' . $name;

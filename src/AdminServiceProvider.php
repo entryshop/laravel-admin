@@ -2,6 +2,7 @@
 
 namespace Entryshop\Admin;
 
+use Entryshop\Admin\Commands\CreateAdminUser;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,10 @@ class AdminServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__ . '/../resources/assets' => public_path('vendor/admin')], 'admin-assets');
+
+            $this->commands([
+                CreateAdminUser::class,
+            ]);
         }
     }
 }

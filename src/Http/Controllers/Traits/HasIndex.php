@@ -9,6 +9,12 @@ use Entryshop\Admin\Components\Widgets\Action;
 
 trait HasIndex
 {
+    public $index_actions = [
+        'view'   => true,
+        'edit'   => true,
+        'delete' => true,
+    ];
+
     public function index()
     {
         admin()->title($this->getLabelPlural());
@@ -58,9 +64,32 @@ trait HasIndex
             $grid->search($searches);
         }
 
-        if (!empty($filters = $this->filters())) {
+        $filters = [];
+        foreach ($this->filters() as $name => $filter) {
+            if (is_string($filter)) {
+                $filter = [
+                    'type' => 'text',
+                    'name' => $filter,
+                ];
+            }
+
+            if (is_string($name)) {
+                $filter['name'] = $name;
+            }
+
+            if (is_array($filter)) {
+                $filter = $this->getFilter($filter);
+            }
+
+            if (!empty($filter)) {
+                $filters[] = $filter;
+            }
+        }
+
+        if (!empty($filters)) {
             $grid->filters($filters);
         }
+
 
         if (!empty($tools = $this->tools())) {
             $grid->tools($tools);
@@ -144,5 +173,17 @@ trait HasIndex
         $cellClass = Grid::$availableColumns[$column['type'] ?? 'text'];
 
         return $cellClass::make($column);
+    }
+
+    protected function getFilter($filter)
+    {
+        $filter['label'] ??= $this->getLang($filter['name']);
+
+        /**
+         * @var Cell $cellClass
+         */
+        $cellClass = Grid::$availableFilters[$filter['type'] ?? 'text'];
+
+        return $cellClass::make($filter);
     }
 }

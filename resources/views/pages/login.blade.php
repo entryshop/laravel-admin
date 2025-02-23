@@ -35,10 +35,11 @@
                         <div class="card-body p-4">
                             <div class="p-2 mt-4">
                                 @include('admin::partials.errors')
-                                <form action="{{route('admin.login.submit')}}" method="post">
+                                <form action="{{route(config('admin.as').'login.submit')}}" method="post">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="{{admin()->username()}}" class="form-label">{{admin()->usernameLabel()}}</label>
+                                        <label for="{{admin()->username()}}"
+                                               class="form-label">{{admin()->usernameLabel()}}</label>
                                         <input type="text" class="form-control" name="{{admin()->username()}}"
                                                placeholder="{{admin()->usernameLabel()}}">
                                     </div>

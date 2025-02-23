@@ -89,6 +89,10 @@
             border-radius: 8px;
             border: 1px solid #dee2e6;
         }
+
+        table td {
+            vertical-align: middle;
+        }
     </style>
 @endpush
 
