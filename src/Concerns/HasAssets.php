@@ -2,11 +2,19 @@
 
 namespace Entryshop\Admin\Concerns;
 
+use Illuminate\Pagination\Paginator;
+
 /**
  * @method self|string favicon($value = null)
+ * @method self|string csp($value = null) csp nonce
  */
 trait HasAssets
 {
+    public function setupHasAssets()
+    {
+        Paginator::useBootstrapFive();
+    }
+
     public function js($value = null)
     {
         if (empty($value)) {

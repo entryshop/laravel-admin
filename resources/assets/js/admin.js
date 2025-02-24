@@ -3,6 +3,7 @@
  * Author: Alex
  */
 class Admin {
+    cspNonce;
 
     init() {
         $.ajaxSetup({
@@ -10,6 +11,14 @@ class Admin {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        var metaElement = document.querySelector('meta[name="csp-nonce"]');
+
+        if (metaElement) {
+            this.cspNonce = metaElement.getAttribute('content');
+        } else {
+            console.log('can not found csp nonce');
+        }
 
         this.initActionButton();
     }
@@ -80,6 +89,7 @@ class Admin {
         }
         return window._admin;
     }
+
     window.admin().init();
 })();
 
