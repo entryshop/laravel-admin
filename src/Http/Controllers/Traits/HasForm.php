@@ -2,7 +2,6 @@
 
 namespace Entryshop\Admin\Http\Controllers\Traits;
 
-use Entryshop\Admin\Components\Cell;
 use Entryshop\Admin\Components\Form;
 
 trait HasForm
@@ -47,28 +46,11 @@ trait HasForm
             ->model($model)
             ->route($this->getRoute())
             ->editing(true);
-        $fields = [];
-        foreach ($this->fields($id) as $name => $field) {
-            if (is_string($field)) {
-                $field = [
-                    'type' => 'text',
-                    'name' => $field,
-                ];
-            }
-
-            if (is_string($name)) {
-                $field['name'] = $name;
-            }
-
-            if (is_array($field)) {
-                $field = $this->getField($field);
-            }
-
+        $fields = Form\Form::toFields($this->fields($id));
+        foreach ($fields as $field) {
             if (!$field->getOriginal('label')) {
                 $field->label($this->getLang($field->name()));
             }
-
-            $fields[] = $field;
         }
         $form->fields($fields);
         return $form;
@@ -77,16 +59,6 @@ trait HasForm
     protected function fields($id = null)
     {
         return [];
-    }
-
-    protected function getField($column)
-    {
-        /**
-         * @var Cell $cellClass
-         */
-        $cellClass = Form::$availableFields[$column['type'] ?? 'text'];
-
-        return $cellClass::make($column);
     }
 
     protected function save($id = null, $request = null)

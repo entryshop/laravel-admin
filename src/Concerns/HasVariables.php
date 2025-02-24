@@ -7,7 +7,6 @@ use InvalidArgumentException;
 
 /**
  * @property-read array $variables
- * @method static|array $context
  */
 trait HasVariables
 {

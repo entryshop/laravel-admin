@@ -20,12 +20,6 @@ class Form extends Element
 
     public $view = 'admin::form';
 
-    public static $availableFields = [
-        'text'   => Fields\Text::class,
-        'image'  => Fields\Image::class,
-        'select' => Fields\Select::class,
-    ];
-
     public function save($request = null)
     {
         $this->setupForm();

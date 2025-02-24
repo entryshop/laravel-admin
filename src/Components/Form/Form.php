@@ -3,6 +3,7 @@
 namespace Entryshop\Admin\Components\Form;
 
 use Entryshop\Admin\Components\Element;
+use Entryshop\Admin\Components\Form\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,10 +16,18 @@ use Illuminate\Database\Eloquent\Model;
  * @method self|boolean hideLabel($value = null)
  * @method self|bool ajax($value = null)
  * @method self|bool hideSubmitButton($value = null)
+ * @method self|string submitButtonLabel($value = null)
+ * @method self|string submitButtonColor($value = null)
  */
 class Form extends Element
 {
     public $view = 'admin::form.form';
+
+    public static $availableFields = [
+        'text'   => Fields\Text::class,
+        'image'  => Fields\Image::class,
+        'select' => Fields\Select::class,
+    ];
 
     public function getDefaultMethod()
     {
@@ -44,7 +53,7 @@ class Form extends Element
 
     public function getDefaultSubmitButton()
     {
-        return '<button class="btn btn-primary">' . __('admin::base.submit') . '</button>';
+        return '<button class="btn btn-' . $this->get('submitButtonColor', 'primary') . '">' . $this->get('submitButtonLabel', __('admin::base.submit')) . '</button>';
     }
 
     public function validate($request = null)
@@ -73,12 +82,18 @@ class Form extends Element
             $model->save();
             return $model;
         }
+
         return null;
+    }
+
+    public function submit()
+    {
+        $this->callMethods('setup');
+        return $this->handle();
     }
 
     public function handle()
     {
-        $this->callMethods('setup');
         $this->validate();
         $this->save();
         return $this->response();
@@ -96,5 +111,36 @@ class Form extends Element
             ->flex(true)
             ->hideLabel(true)
             ->hideSubmitButton(true);
+    }
+
+    public static function toFields(array $fields)
+    {
+        $result = [];
+
+        foreach ($fields as $name => $field) {
+            if (is_string($field)) {
+                $field = [
+                    'name' => $field,
+                    'type' => 'text',
+                ];
+            }
+
+            if (is_string($name)) {
+                if (is_array($field)) {
+                    $field['name'] = $name;
+                }
+            }
+
+            if (is_array($field)) {
+                $fieldClass = static::$availableFields[$field['type'] ?? 'text'];
+                $field      = new $fieldClass($field);
+            }
+
+            if ($field instanceof Field) {
+                $result[] = $field;
+            }
+        }
+
+        return $result;
     }
 }
