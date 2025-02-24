@@ -7,9 +7,10 @@
     @endif
     @foreach($_this->get('columns')??[] as $column)
         <th>
-            {!! $column->label() !!}
             @if($column->sortable())
-                @include('admin::table.partials.sort-column', ['name' => $column->name()])
+                @include('admin::table.partials.sort-column', ['label' => $column->label(), 'name' => $column->name()])
+            @else
+                {!! $column->label() !!}
             @endif
         </th>
     @endforeach

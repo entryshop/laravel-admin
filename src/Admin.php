@@ -50,6 +50,12 @@ class Admin
         return $this->layout;
     }
 
+    public function menus(...$args)
+    {
+        $this->layout()->menus(...$args);
+        return $this;
+    }
+
     public function response($action)
     {
         return response()->json($action);

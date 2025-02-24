@@ -1,4 +1,5 @@
-<a class="ms-1" href="{{$_this->sortUrl($name)}}">
+<a role="button" href="{{$_this->sortUrl($name)}}">
+    {!! $label !!}
     @if(request('sort_by') == $name)
         @if(request('sort_type') == 'desc')
             <i class="ri-sort-desc"></i>
@@ -7,6 +8,6 @@
             <i class="ri-sort-asc"></i>
         @endif
     @else
-        <i class="text-muted ri-arrow-up-down-fill"></i>
+        <i class="opacity-25 ri-arrow-up-down-fill"></i>
     @endif
 </a>

@@ -49,7 +49,7 @@ trait HasRoutes
     {
         $params = [
             'prefix'     => config('admin.prefix'),
-            'as'         => 'admin.',
+            'as'         => config('admin.as'),
             'middleware' => ['web', ServeAdmin::class],
         ];
 

@@ -24,8 +24,9 @@ class Admin {
     }
 
     initActionButton() {
-        $('[data-action]').on('click', function (event) {
+        $('[data-action]').on('click', async function (event) {
             let confirm_message = $(this).data('confirm');
+
             if (confirm_message) {
                 if (!confirm(confirm_message)) {
                     event.preventDefault();
@@ -33,6 +34,7 @@ class Admin {
                     return false;
                 }
             }
+
             let action = $(this).data('action');
             let method = $(this).data('method');
             let payload = $(this).data('payload') || {};

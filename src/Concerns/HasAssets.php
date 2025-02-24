@@ -44,6 +44,7 @@ trait HasAssets
             $this->asset('libs/flatpickr/flatpickr.min.js'),
             $this->asset('libs/toastify-js/src/toastify.js'),
             $this->asset('libs/choices.js/public/assets/scripts/choices.min.js'),
+            $this->asset('libs/sweetalert2/sweetalert2.all.min.js'),
             $this->asset('js/app.js'),
             $this->asset('js/admin.js'),
         ];
@@ -54,6 +55,7 @@ trait HasAssets
         return [
             $this->asset('css/bootstrap.min.css'),
             $this->asset('css/icons.min.css'),
+            $this->asset('libs/sweetalert2/sweetalert2.min.css'),
             $this->asset('css/app.min.css'),
             $this->asset('css/custom.min.css'),
         ];
