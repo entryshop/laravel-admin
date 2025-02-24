@@ -156,7 +156,7 @@ class Grid extends Element
         $this->applyFilters();
         $this->applySort();
 
-        $this->models = $this->models->paginate($this->get('perPage', 10));
+        $this->models = $this->models->paginate($this->get('perPage', 10))->withQueryString();
 
         /**
          * @var Table $_table

@@ -43,6 +43,9 @@
                             </div>
                         </div>
                     </div>
+                    <form action="{{request()->fullUrl()}}" class="filters">
+                        <input type="hidden" name="filter">
+                    </form>
                 </div>
             @endif
         </div>
@@ -173,10 +176,8 @@
             });
 
             $('#resetFilters').click(function () {
-                let params = new URLSearchParams(window.location.search);
-                params.set('filter', '');
-                window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
-                window.location.search = params;
+                $('form.filters [name=filter]').val('');
+                $('form.filters').submit();
             });
 
             $('#applyFilters').click(function () {
@@ -190,11 +191,8 @@
                         value: row.find('input').val()
                     });
                 });
-
-                let params = new URLSearchParams(window.location.search);
-                params.set('filter', JSON.stringify(filters));
-                window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
-                window.location.search = params;
+                $('form.filters [name=filter]').val(JSON.stringify(filters));
+                $('form.filters').submit();
             });
 
             @if(request('filter'))
