@@ -4,6 +4,7 @@ namespace Entryshop\Admin;
 
 use Entryshop\Admin\Components\Layout;
 use Entryshop\Admin\Components\Widgets\Container;
+use Entryshop\Admin\Concerns\CanCallMethods;
 use Entryshop\Admin\Concerns\HasAssets;
 use Entryshop\Admin\Concerns\HasAttributes;
 use Entryshop\Admin\Concerns\HasBrand;
@@ -17,6 +18,7 @@ use Entryshop\Admin\Concerns\InteractsWithEvents;
  */
 class Admin
 {
+    use CanCallMethods;
     use InteractsWithEvents;
     use HasVariables;
     use HasToasts;

@@ -30,7 +30,7 @@ class Grid extends Element
 
     public $view = 'admin::grid';
 
-    protected $models;
+    public $models;
 
     public static $availableColumns = [
         'text'  => Columns\Text::class,
@@ -148,18 +148,20 @@ class Grid extends Element
 
     public function render()
     {
+        $this->callMethods('setup');
+
         $this->models = $this->get('models');
 
         $this->applySearch();
         $this->applyFilters();
         $this->applySort();
 
-        $this->set('models', $this->models->paginate($this->get('perPage', 10)));
+        $this->models = $this->models->paginate($this->get('perPage', 10));
 
         /**
          * @var Table $_table
          */
-        $_table = Table::make()->models($this->models());
+        $_table = Table::make()->models($this->models);
 
         if (is_callable($table = $this->getOriginal('table'))) {
             call_user_func($table, $_table);
@@ -172,6 +174,7 @@ class Grid extends Element
         $_table->selectable(!empty($this->batch()));
 
         $this->set('table', $_table);
+        $this->models($this->models);
 
         return parent::render();
     }

@@ -12,7 +12,11 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/admin.php', 'admin');
         config(Arr::dot(config('admin.auth', []), 'auth.'));
-        $this->app->scoped(Admin::class);
+        $this->app->scoped(Admin::class, function () {
+            $admin = new Admin();
+            $admin->callMethods('boot');
+            return $admin;
+        });
     }
 
     public function boot()

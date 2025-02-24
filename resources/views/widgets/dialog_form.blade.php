@@ -1,5 +1,8 @@
 <div>
-    <div id="errors_{{$_this->id()}}"></div>
+    <div id="errors_{{$_this->id()}}" class="alert alert-danger">
+        <div class="d-flex flex-column errors">
+        </div>
+    </div>
     @include('admin::form.form', ['_this' => $_this])
 </div>
 
@@ -9,10 +12,10 @@
 
         function ajaxForm(id) {
             let form = $("form#" + id);
-
+            let errors_container = $("#errors_" + id);
+            errors_container.hide();
             form.on('submit', function (e) {
                 e.stopPropagation();
-                $("#errors_" + id).html('');
                 let submit_btn = $(this).find('.btn-submit');
                 if (submit_btn) {
                     submit_btn.prop('disabled', true);
@@ -32,11 +35,16 @@
                             submit_btn.prop('disabled', false);
                         }
                         if (data.status === 422) {
+                            errors_container.find('.errors').html('');
+                            errors_container.show();
+                            form.find("[name]").removeClass('is-invalid');
                             let errors = data.responseJSON.errors;
                             for (let key in errors) {
                                 if (errors.hasOwnProperty(key)) {
                                     let error = errors[key][0];
-                                    $("#errors_" + id).append("<div class='alert alert-danger'>" + error + "</div>");
+                                    let field = form.find("[name=" + key + "]");
+                                    field.addClass('is-invalid');
+                                    $("#errors_" + id + ' .errors').append("<span>" + error + "</span>");
                                 }
                             }
                         }

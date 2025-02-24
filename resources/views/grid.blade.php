@@ -54,7 +54,6 @@
                     @endforeach
                 </div>
                 <div>
-                    @lang('admin::base.cancel_select')
                 </div>
             </div>
         </div>
@@ -62,12 +61,12 @@
     <div class="card-body p-0">
         @if($table = $_this->get('table'))
             <div class="table-responsive">
-                {{render($table)}}
+                {!! render($table) !!}
             </div>
         @endif
     </div>
     <div class="card-footer pb-0">
-        {!! $_this->models()->links() !!}
+        {!!  $_this->models->links() !!}
     </div>
 </div>
 

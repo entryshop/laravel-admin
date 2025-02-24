@@ -55,6 +55,27 @@ class Admin {
         });
     }
 
+    params(url) {
+        let params = {};
+        try {
+            // 创建 URL 对象
+            const urlObj = new URL(url);
+
+            // 获取 URLSearchParams 对象
+            const searchParams = urlObj.searchParams;
+
+            // 遍历所有参数并添加到对象中
+            for (const [key, value] of searchParams) {
+                params[key] = value;
+            }
+
+            return params;
+        } catch (error) {
+            console.error('Invalid URL:', error);
+            return {};
+        }
+    }
+
     response(response) {
         // check if response is json
 

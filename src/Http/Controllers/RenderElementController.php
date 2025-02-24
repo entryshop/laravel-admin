@@ -9,6 +9,7 @@ class RenderElementController
     public function __invoke()
     {
         $element    = request('element');
+        $element    = urldecode($element);
         $payload    = request('payload');
         $renderable = app($element);
         if (method_exists($renderable, 'payload')) {
