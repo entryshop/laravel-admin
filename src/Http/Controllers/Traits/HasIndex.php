@@ -65,6 +65,7 @@ trait HasIndex
         }
 
         $filters = [];
+
         foreach ($this->filters() as $name => $filter) {
             if (is_string($filter)) {
                 $filter = [
@@ -90,9 +91,12 @@ trait HasIndex
             $grid->filters($filters);
         }
 
-
         if (!empty($tools = $this->tools())) {
             $grid->tools($tools);
+        }
+
+        if (!empty($batches = $this->batches())) {
+            $grid->batch($batches);
         }
 
         if (!empty($order = $this->order())) {
@@ -125,6 +129,12 @@ trait HasIndex
                 ->class('btn btn-primary')
                 ->href(admin()->url($this->getRoute() . '/create'))
                 ->label(__('admin::base.create')),
+        ];
+    }
+
+    protected function batches()
+    {
+        return [
         ];
     }
 

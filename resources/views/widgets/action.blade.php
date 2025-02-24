@@ -37,7 +37,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title"
                         id="myModalLabel">{!! $_this->get('dialog')['title'] ?? $_this->label() !!}</h5>
-                    <span class="ms-1 btn-refresh" type="button" aria-label="Refresh"><i
+                    <span class="ms-1 btn-refresh d-none" type="button" aria-label="Refresh"><i
                                 class="ri-refresh-line"></i></span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

@@ -11,7 +11,7 @@
     @endif
     @if($body = $_this->body())
         <div class="card-body">
-            {{render($body)}}
+            {!! render($body) !!}
         </div>
     @endif
     @if($footer = $_this->footer())

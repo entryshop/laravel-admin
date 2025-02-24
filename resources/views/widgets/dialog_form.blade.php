@@ -9,6 +9,7 @@
 
         function ajaxForm(id) {
             let form = $("form#" + id);
+
             form.on('submit', function (e) {
                 e.stopPropagation();
                 $("#errors_" + id).html('');
@@ -16,24 +17,20 @@
                 if (submit_btn) {
                     submit_btn.prop('disabled', true);
                 }
+                let data = new FormData(this);
                 $.ajax({
                     url: form.attr('action'),
                     type: form.attr('method'),
-                    data: form.serialize(),
+                    data: data,
+                    contentType: false,
+                    processData: false,
                     success: function (data) {
-                        switch (data.action) {
-                            case 'refresh':
-                                window.location.reload();
-                                break;
-                            case 'redirect':
-                                window.location.href = data.url;
-                                break;
-                            default:
-                                break;
-                        }
+                        admin().response(data);
                     },
                     error: function (data) {
-                        console.log(data);
+                        if (submit_btn) {
+                            submit_btn.prop('disabled', false);
+                        }
                         if (data.status === 422) {
                             let errors = data.responseJSON.errors;
                             for (let key in errors) {

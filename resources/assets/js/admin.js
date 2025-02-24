@@ -56,6 +56,7 @@ class Admin {
                 window.location.href = response.url;
                 break;
             case 'reload':
+            case 'refresh':
                 window.location.reload();
                 break;
             case 'close':
