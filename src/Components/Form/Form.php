@@ -53,7 +53,7 @@ class Form extends Element
 
     public function getDefaultSubmitButton()
     {
-        return '<button class="btn btn-' . $this->get('submitButtonColor', 'primary') . '">' . $this->get('submitButtonLabel', __('admin::base.submit')) . '</button>';
+        return '<button class="btn-submit btn btn-' . $this->get('submitButtonColor', 'primary') . '">' . $this->get('submitButtonLabel', __('admin::base.submit')) . '</button>';
     }
 
     public function validate($request = null)
@@ -88,15 +88,15 @@ class Form extends Element
 
     public function submit()
     {
-        $this->callMethods('setup');
-        return $this->handle();
+        $this->save();
+        return $this->response();
     }
 
     public function handle()
     {
+        $this->callMethods('setup');
         $this->validate();
-        $this->save();
-        return $this->response();
+        return $this->submit();
     }
 
     public function response()

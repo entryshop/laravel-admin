@@ -18,9 +18,9 @@
    data-confirm="{{$_this->get('confirm')}}"
    @endif
 
-   @if($_this->get('ajax'))
+   @if($_this->get('dialog'))
        data-bs-toggle="modal" data-bs-target="#{{$_this->id()}}-modal"
-    @endif
+        @endif
 
 >
     @if($_this->icon())
@@ -29,15 +29,16 @@
     {!! $_this->label() !!}
 </a>
 
-@if($_this->get('ajax'))
+@if($_this->get('dialog'))
     <div id="{{$_this->id()}}-modal" class="modal fade"
          tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-{{$_this->get('dialog')['size'] ??''}}">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Modal Heading</h5>
+                    <h5 class="modal-title"
+                        id="myModalLabel">{!! $_this->get('dialog')['title'] ?? $_this->label() !!}</h5>
                     <span class="ms-1 btn-refresh" type="button" aria-label="Refresh"><i
-                            class="ri-refresh-line"></i></span>
+                                class="ri-refresh-line"></i></span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -58,16 +59,17 @@
     @push('scripts')
         <script nonce="{{admin()->csp()}}">
             let content_loaded_{{$_this->id()}} = false;
+            let dialog_element_{{$_this->id()}} = "{{urlencode($_this->get('dialog')['element'])}}";
             $('#{{$_this->id()}}').on('click', function () {
                 if (!content_loaded_{{$_this->id()}}) {
-                    getRenderContent("{{urlencode($_this->get('ajax'))}}", "{{$_this->id()}}");
+                    getRenderContent(dialog_element_{{$_this->id()}}, "{{$_this->id()}}");
                     content_loaded_{{$_this->id()}} = true;
                 }
                 $('#{{$_this->id()}}-modal').modal('show');
             });
 
             $('#{{$_this->id()}}-modal .btn-refresh').on('click', function () {
-                getRenderContent("{{urlencode($_this->get('ajax'))}}", "{{$_this->id()}}");
+                getRenderContent(dialog_element_{{$_this->id()}}, "{{$_this->id()}}");
             });
         </script>
     @endpush

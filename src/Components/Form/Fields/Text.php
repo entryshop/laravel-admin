@@ -14,4 +14,14 @@ class Text extends Field
     {
         return 'text';
     }
+
+    public function email()
+    {
+        return $this->nativeType('email');
+    }
+
+    public function password()
+    {
+        return $this->nativeType('password');
+    }
 }

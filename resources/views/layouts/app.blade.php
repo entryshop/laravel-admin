@@ -124,6 +124,7 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
+                    <!-- title -->
                     @if($title = $_this->title())
                         <div class="row">
                             <div class="col-12">
@@ -144,7 +145,30 @@
                             </div>
                         </div>
                     @endif
+                    <!-- end title -->
+
+                    <!-- alert-->
+                    @if($__alert = session()->get('__alert'))
+                        <div class="alert alert-{{$__alert['type']??'primary'}}
+                            @if($__alert['closeable'] ?? true) alert-dismissible fade show  @endif
+                            @if($__alert['icon']??null)  alert-label-icon @endif
+                            material-shadow" role="alert">
+                            @if($__alert['icon']??null)
+                                <i class="label-icon {{$__alert['icon']}}"></i>
+                            @endif
+                            {!!$__alert['message'] ?? '' !!}
+                            @if($__alert['closeable'] ?? true)
+                                <button type="button" class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            @endif
+                        </div>
+                    @endif
+                    <!--end alert-->
+
+                    <!-- content -->
                     @include('admin::layouts.partials.children', ['children' => $_this->children ?? []])
+                    <!-- end content -->
                 </div>
             </div>
         </div>

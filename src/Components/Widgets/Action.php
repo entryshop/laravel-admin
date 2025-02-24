@@ -14,12 +14,18 @@ use Entryshop\Admin\Components\Element;
  * @method self action($value = null)
  * @method self method($value = null)
  * @method self confirm($value = null)
- * @method self ajax($value = null)
+ * @method self dialog($value = null)
  * @method self dom($value = null)
  */
 class Action extends Element
 {
     public $view = 'admin::widgets.action';
+
+    const DIALOG_SIZE_LG                 = 'lg';
+    const DIALOG_SIZE_SM                 = 'sm';
+    const DIALOG_SIZE_XL                 = 'xl';
+    const DIALOG_SIZE_FULLSCREEN         = 'fullscreen';
+    const DIALOG_SIZE_FULLSCREEN_SM_DOWN = 'fullscreen-sm-down';
 
     public function post($action = null)
     {

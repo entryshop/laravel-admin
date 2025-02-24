@@ -5,6 +5,7 @@ namespace Entryshop\Admin\Http\Controllers;
 use Entryshop\Admin\Components\Layout;
 use Entryshop\Admin\Concerns\CanCallMethods;
 use Entryshop\Admin\Concerns\HasVariables;
+use Entryshop\Admin\Http\Controllers\Traits\CanDelete;
 use Entryshop\Admin\Http\Controllers\Traits\HasForm;
 use Entryshop\Admin\Http\Controllers\Traits\HasIndex;
 use Entryshop\Admin\Http\Controllers\Traits\HasShow;
@@ -17,7 +18,7 @@ class AdminController
 {
     use CanCallMethods;
     use HasVariables;
-    use HasIndex, HasShow, HasForm;
+    use HasIndex, HasShow, HasForm, CanDelete;
 
     /**
      * @var string|Model|Builder
