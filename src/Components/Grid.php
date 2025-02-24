@@ -21,6 +21,7 @@ use Str;
  * @method self|array batch($value = null)
  * @method self|array tools($value = null)
  * @method self|array filters($value = null)
+ * @method self|bool selectable($value = null)
  * @method self|number perPage($value = null)
  * @method self table(Closure $value)
  */
@@ -171,7 +172,7 @@ class Grid extends Element
             $_table->columns($columns);
         }
 
-        $_table->selectable(!empty($this->batch()));
+        $_table->selectable($this->selectable() || !empty($this->batch()));
 
         $this->set('table', $_table);
         $this->models($this->models);
