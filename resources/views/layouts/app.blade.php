@@ -149,20 +149,10 @@
 
                     <!-- alert-->
                     @if($__alert = session()->get('__alert'))
-                        <div class="alert alert-{{$__alert['type']??'primary'}}
-                            @if($__alert['closeable'] ?? true) alert-dismissible fade show  @endif
-                            @if($__alert['icon']??null)  alert-label-icon @endif
-                            material-shadow" role="alert">
-                            @if($__alert['icon']??null)
-                                <i class="label-icon {{$__alert['icon']}}"></i>
-                            @endif
-                            {!!$__alert['message'] ?? '' !!}
-                            @if($__alert['closeable'] ?? true)
-                                <button type="button" class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            @endif
-                        </div>
+                        <x-admin::alert :closeable="$__alert['closeable']" :type="$__alert['type']"
+                                        :icon="$__alert['icon']??null">
+                            {!! $__alert['message'] !!}
+                        </x-admin::alert>
                     @endif
                     <!--end alert-->
 
