@@ -49,17 +49,15 @@
                 </div>
             @endif
         </div>
-        <div class="batch-actions hidden">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
+        @if(!empty($_this->batch()))
+            <div class="batch-actions hidden">
+                <div class="d-flex justify-content-between align-items-center">
                     @foreach($_this->batch()??[] as $action)
                         {!! render($action->withAttributes(['data-table' => $_this->table()->id()])) !!}
                     @endforeach
                 </div>
-                <div>
-                </div>
             </div>
-        </div>
+        @endif
     </div>
     <div class="card-body p-0">
         @if($table = $_this->get('table'))
@@ -102,6 +100,9 @@
     <script nonce="{{admin()->csp()}}">
 
         $('#{{$_this->table()->id()}}').on('selectedRowsChanged', function (e, count) {
+            if ($('.batch-actions').length == 0) {
+                return;
+            }
             if (count) {
                 $('.batch-actions').show();
                 $('.search-form').hide();
