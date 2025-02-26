@@ -41,6 +41,7 @@
                                         <label for="{{admin()->username()}}"
                                                class="form-label">{{admin()->usernameLabel()}}</label>
                                         <input type="text" class="form-control" name="{{admin()->username()}}"
+                                               value="{{old(admin()->username())}}"
                                                placeholder="{{admin()->usernameLabel()}}">
                                     </div>
                                     <div class="mb-3">
