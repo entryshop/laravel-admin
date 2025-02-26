@@ -1,216 +1,76 @@
-<div class="card">
+<div class="card" id="{{$_this->id()}}">
     <div class="card-header">
-        <!-- search form -->
-        <div class="search-form">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-1">
+        <div class="d-flex justify-content-between align-items-center search-form">
+            <div class="header-left d-flex gap-1 align-items-center">
+                <span class="card-title">
+                    {!! $_this->title()  !!}
+                </span>
+                <form class="d-flex gap-3">
                     @if($_this->get('filters', null))
-                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                        <button class="btn btn-primary position-relative" type="button" data-bs-toggle="collapse"
+                                data-bs-transition="false"
                                 data-bs-target="#{{$_this->id()}}_filters" aria-expanded="false"
                                 aria-controls="filters">
                             <i class="ri-filter-line"></i>
+                            @if(!empty(request('filter')) && $filter_count = count(to_json(request('filter'))))
+                                <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                {{$filter_count}}
+                            </span>
+                            @endif
                         </button>
                     @endif
-                    @if($search_form = $_this->get('search_form'))
-                        {{render($search_form)}}
+                    @if($_this->searches())
+                        <div class="search-box">
+                            <input type="text" name="search" value="{{request('search')}}" class="form-control"
+                                   placeholder="@lang('admin::base.search')...">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
                     @endif
-                </div>
-                <div>
-                    @foreach($_this->tools()??[] as $tool)
-                        {!! render($tool) !!}
-                    @endforeach
-                </div>
+                </form>
             </div>
-            @if($_this->get('filters', null))
-                <div class="collapse mt-3" id="{{$_this->id()}}_filters">
-                    <div class="filter-container">
-                        <div id="filterRows">
-                            <!-- filter rows will be added here -->
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex gap-1">
-                                <select class="form-select" name="add-filter">
-                                    @foreach($_this->filters()??[] as $filter)
-                                        <option value="{{$filter->name()}}">{{$filter->label()}}</option>
-                                    @endforeach
-                                </select>
-                                <button id="addFilter" class="flex-shrink-0 btn btn-light">
-                                    + @lang('admin::base.add')</button>
-                            </div>
-                            <div class="d-flex gap-3">
-                                <button id="resetFilters" class="btn btn-light">@lang('admin::base.reset')</button>
-                                <button id="applyFilters" class="btn btn-primary">@lang('admin::base.apply')</button>
-                            </div>
-                        </div>
-                    </div>
-                    <form action="{{request()->fullUrl()}}" class="filters">
-                        <input type="hidden" name="filter">
-                    </form>
-                </div>
-            @endif
+            <div class="header-right d-flex gap-1 align-items-center">
+                {!! render($_this->tools()) !!}
+            </div>
         </div>
-        @if(!empty($_this->batch()))
-            <div class="batch-actions hidden">
-                <div class="d-flex justify-content-between align-items-center">
-                    @foreach($_this->batch()??[] as $action)
-                        {!! render($action->withAttributes(['data-table' => $_this->table()->id()])) !!}
-                    @endforeach
-                </div>
-            </div>
-        @endif
+        <div class="batch-actions hidden">
+            @foreach($_this->batches()??[] as $batch_action)
+                {!! render($batch_action->withAttributes(['data-table' => $_this->table->id()])) !!}
+            @endforeach
+        </div>
     </div>
+    @if($_this->get('filters', null))
+        @include('admin::widgets.filters', [
+            'id' => $_this->id(),
+            'filters'  =>$_this->filters(),
+        ])
+    @endif
     <div class="card-body p-0">
-        @if($table = $_this->get('table'))
-            <div class="table-responsive">
-                {!! render($table) !!}
-            </div>
-        @endif
+        <div class="table-responsive">
+            {!! render($_this->table)  !!}
+        </div>
     </div>
     <div class="card-footer pb-0">
-        {!!  $_this->models->links() !!}
+        {!! $_this->models->links() !!}
     </div>
 </div>
 
-@push('styles')
-    <style nonce="{{admin()->csp()}}">
-        .hidden {
-            display: none;
-        }
-
-        .filter-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-
-        .filter-container {
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-
-        table td {
-            vertical-align: middle;
-        }
-    </style>
-@endpush
-
 @push('scripts')
     <script nonce="{{admin()->csp()}}">
-
-        $('#{{$_this->table()->id()}}').on('selectedRowsChanged', function (e, count) {
-            if ($('.batch-actions').length == 0) {
+        $('#{{$_this->table->id()}}').on('selectedRowsChanged', function (e, count) {
+            console.log(count);
+            let batch_actions = $('.batch-actions');
+            if (batch_actions.length === 0) {
                 return;
             }
+            let search_form = $('.search-form');
             if (count) {
-                $('.batch-actions').show();
-                $('.search-form').hide();
+                batch_actions.removeClass('hidden');
+                search_form.addClass('hidden');
             } else {
-                $('.batch-actions').hide();
-                $('.search-form').show();
+                batch_actions.addClass('hidden');
+                search_form.removeClass('hidden');
             }
-        });
-
-        $(document).ready(function () {
-
-            const fields = [
-                    @foreach($_this->filters()??[] as $filter)
-                {
-                    'name': '{{$filter->name()}}',
-                    'label': "{{$filter->label()}}",
-                    'operators': @json($filter->operators()),
-                },
-                @endforeach
-            ]
-
-            function createFilterRow(filter) {
-
-                if (!filter) {
-                    filter = {};
-                }
-
-                let add_filter_name = filter.field || $('select[name="add-filter"]').val();
-                const field = fields.find(f => f.name === add_filter_name);
-
-                const row = $('<div>').addClass('filter-row').attr('data-name', add_filter_name);
-
-                // Delete button
-                const deleteBtn = $('<button>')
-                    .addClass('btn btn-outline-danger')
-                    .html('<i class="ri-delete-bin-line"></i>')
-                    .click(function () {
-                        $(this).closest('.filter-row').remove();
-                    });
-
-                // Field select
-                const fieldSelect = $('<span>').addClass('flex-shrink-0').html(field.label);
-
-                // Operator select
-                const operatorSelect = $('<select>')
-                    .addClass('form-select')
-                    .css('width', '200px');
-                field.operators.forEach(op => {
-                    let operator_option = $('<option>').text(op.label).val(op.name);
-                    if (filter.operator === op.name) {
-                        operator_option.prop('selected', true);
-                    }
-                    operatorSelect.append(operator_option);
-                });
-
-                // Value input
-                const valueInput = $('<input>')
-                    .addClass('form-control')
-                    .attr('type', 'text')
-                    .css('width', '200px');
-
-                if (filter.value) {
-                    valueInput.val(filter.value);
-                }
-
-                row.append(fieldSelect, operatorSelect, valueInput, deleteBtn);
-                return row;
-            }
-
-            $('#addFilter').click(function () {
-                $('#filterRows').append(createFilterRow());
-            });
-
-            $('#resetFilters').click(function () {
-                $('form.filters [name=filter]').val('');
-                $('form.filters').submit();
-            });
-
-            $('#applyFilters').click(function () {
-                const filters = [];
-                $('.filter-row').each(function () {
-                    const row = $(this);
-
-                    filters.push({
-                        field: row.data('name'),
-                        operator: row.find('select').eq(0).val(),
-                        value: row.find('input').val()
-                    });
-                });
-                $('form.filters [name=filter]').val(JSON.stringify(filters));
-                $('form.filters').submit();
-            });
-
-            @if(request('filter'))
-            @php
-                $filters = to_json(request('filter'));
-            @endphp
-            @if(!empty($filters))
-            const bsCollapse = new bootstrap.Collapse('#{{$_this->id()}}_filters', {
-                show: true, animation: false
-            });
-            const filters = @json(to_json(request('filter')));
-
-            for (const filter of filters) {
-                $('#filterRows').append(createFilterRow(filter));
-            }
-            @endif
-            @endif
         });
     </script>
 @endpush

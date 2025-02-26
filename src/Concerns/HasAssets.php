@@ -43,7 +43,6 @@ trait HasAssets
             $this->asset('libs/choices.js/public/assets/scripts/choices.min.js '),
             $this->asset('libs/flatpickr/flatpickr.min.js'),
             $this->asset('libs/toastify-js/src/toastify.js'),
-            $this->asset('libs/layui/layui.js'),
             $this->asset('libs/choices.js/public/assets/scripts/choices.min.js'),
             $this->asset('js/app.js'),
             $this->asset('js/admin.js'),
@@ -56,7 +55,6 @@ trait HasAssets
             $this->asset('css/bootstrap.min.css'),
             $this->asset('css/icons.min.css'),
             $this->asset('css/app.min.css'),
-            $this->asset('libs/layui/css/layui.css'),
             $this->asset('css/custom.min.css'),
         ];
     }

@@ -2,35 +2,36 @@
 
 namespace Entryshop\Admin\Components;
 
-use Closure;
-use Entryshop\Admin\Components\Filters\Filter;
-use Entryshop\Admin\Components\Form\Fields\Text;
-use Entryshop\Admin\Components\Form\Form;
 use Entryshop\Admin\Components\Table\Columns;
 use Entryshop\Admin\Components\Table\Table;
-use Entryshop\Admin\Concerns\HasChildren;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Str;
 
 /**
- * @method self|array|Builder models($value = null)
- * @method self|array search($value = null)
- * @method self|array columns($value = null)
- * @method self|array batch($value = null)
- * @method self|array tools($value = null)
- * @method self|array filters($value = null)
- * @method self|bool selectable($value = null)
- * @method self|number perPage($value = null)
- * @method self table(Closure $value)
+ * @method Columns\Text text(...$args) Add text column
+ * @method self|string title($value = null) Set table title
+ * @method self|string|Model|array|iterable models($value = null) Set models
+ * @method self|float perPage($value = null) Set per page
+ * @method self|array filters($value = []) Set filters
+ * @method self|array tools($value = []) Set tool buttons
+ * @method self|array batches($value = []) Set batch actions
+ * @method self|array columns($value = []) Set tool buttons
+ * @method self|array searches($value = []) Set search columns
  */
 class Grid extends Element
 {
-    use HasChildren;
-
     public $view = 'admin::grid';
 
+    /**
+     * @var Table
+     */
+    public $table;
+
+    /**
+     * @var string|Model|array|iterable
+     */
     public $models;
 
     public static $availableColumns = [
@@ -38,10 +39,10 @@ class Grid extends Element
         'image' => Columns\Image::class,
     ];
 
-    public static $availableFilters = [
-        'text' => Filters\Text::class,
-        'date' => Filters\Date::class,
-    ];
+    public function registerGrid()
+    {
+        $this->table = Table::make();
+    }
 
     public function __call($method, $parameters)
     {
@@ -49,82 +50,44 @@ class Grid extends Element
             /** @var Columns\Column $columnClass */
             $columnClass = static::$availableColumns[$method];
             $column      = $columnClass::make(...$parameters);
-            $this->column($column);
-            return $this;
-        }
-
-        if (Str::endsWith($method, '_filter')) {
-            $method = Str::beforeLast($method, '_filter');
-            if (in_array($method, array_keys(static::$availableFilters))) {
-                /** @var Filter $filterClass */
-                $filterClass = static::$availableFilters[$method];
-                $filter      = $filterClass::make(...$parameters);
-                $this->filter($filter);
-                return $this;
-            }
+            $columns     = $this->get('columns', []);
+            $columns[]   = $column;
+            $this->columns($columns);
+            return $column;
         }
 
         return parent::__call($method, $parameters);
     }
 
-    public function column($column)
+    protected function buildModels()
     {
-        $columns   = $this->get('columns', []);
-        $columns[] = $column;
-        $this->columns($columns);
-        return $this;
-    }
+        $this->models = $this->models ?: $this->models();
 
-    public function filter($filter)
-    {
-        $filters   = $this->get('filters', []);
-        $filters[] = $filter;
-        $this->filters($filters);
-        return $this;
-    }
-
-    protected function applySort()
-    {
-        if ($sort_by = request('sort_by')) {
-            $this->models->orderBy($sort_by, request('sort_type'));
+        if (is_string($this->models)) {
+            $this->models = app($this->models);
         }
-    }
 
-    protected function applySearch()
-    {
-        $search = $this->get('search');
-        if (!empty($search)) {
-            $search_keyword = request('search');
+        $this->applySearch();
 
-            $search_form = Form::make()->fields([
-                Text::make('search')->placeholder(__('admin::base.search')),
-            ])->plain()
-                ->model([
-                    'search' => $search_keyword,
-                ]);
+        // apply filters
+        $this->applyFilters();
 
-            $this->set('search_form', $search_form);
+        // apply sort
+        $this->applySort();
 
-            if (!empty($search_keyword)) {
-                $this->models->where(function ($query) use ($search, $search_keyword) {
-                    foreach ($search as $field) {
-                        if ($field === '*') {
-                            $columns        = Schema::getColumnListing($query->from);
-                            $columns_string = implode(',', $columns);
-                            $field          = DB::raw('CONCAT(' . $columns_string . ')');
-                        }
-                        $query->orWhere($field, 'like', "%{$search_keyword}%");
-                    }
-                });
-            }
-        }
+        $this->models = $this->models->paginate($this->perPage())->withQueryString();
     }
 
     protected function applyFilters()
     {
         $filters = $this->filters();
 
+        if (empty($filters)) {
+            return;
+        }
+
         $queries = request('filter');
+
         if (empty($queries)) {
             return;
         }
@@ -147,36 +110,51 @@ class Grid extends Element
         }
     }
 
-    public function render()
+    protected function applySearch()
     {
-        $this->callMethods('setup');
-
-        $this->models = $this->get('models');
-
-        $this->applySearch();
-        $this->applyFilters();
-        $this->applySort();
-
-        $this->models = $this->models->paginate($this->get('perPage', 10))->withQueryString();
-
-        /**
-         * @var Table $_table
-         */
-        $_table = Table::make()->models($this->models);
-
-        if (is_callable($table = $this->getOriginal('table'))) {
-            call_user_func($table, $_table);
+        if (!empty($search = $this->searches())) {
+            $search_keyword = request('search');
+            if (!empty($search_keyword)) {
+                $this->models = $this->models->where(function (Builder $query) use ($search, $search_keyword) {
+                    foreach ($search as $field) {
+                        if ($field === '*') {
+                            $columns        = Schema::getColumnListing($query->from);
+                            $columns_string = implode(',', $columns);
+                            $field          = DB::raw('CONCAT(' . $columns_string . ')');
+                        }
+                        $query->orWhere($field, 'like', "%{$search_keyword}%");
+                    }
+                });
+            }
         }
-
-        if ($columns = $this->get('columns')) {
-            $_table->columns($columns);
-        }
-
-        $_table->selectable($this->selectable() || !empty($this->batch()));
-
-        $this->set('table', $_table);
-        $this->models($this->models);
-
-        return parent::render();
     }
+
+    protected function applySort()
+    {
+        if ($sort_by = request('sort_by')) {
+            $this->models = $this->models->orderBy($sort_by, request('sort_type'));
+        }
+    }
+
+    public function setupGrid()
+    {
+        $this->buildModels();
+        $this->table->models($this->models);
+        $this->table->columns($this->columns());
+        if (!empty($this->batches())) {
+            $this->table->selectable(true);
+        }
+    }
+
+    public function table($callable)
+    {
+        call_user_func($callable, $this->table);
+        return $this;
+    }
+
+    public function getDefaultPerPage()
+    {
+        return 10;
+    }
+
 }

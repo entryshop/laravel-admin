@@ -27,11 +27,25 @@ class Action extends Element
     const DIALOG_SIZE_FULLSCREEN         = 'fullscreen';
     const DIALOG_SIZE_FULLSCREEN_SM_DOWN = 'fullscreen-sm-down';
 
+    public function __construct(...$args)
+    {
+        parent::__construct($args);
+
+        if (is_string($args[0] ?? null)) {
+            $this->label($args[0]);
+        }
+    }
+
     public function post($action = null)
     {
         $this->set('method', 'POST')
             ->set('action', $action);
         return $this;
+    }
+
+    public function button($type = 'primary', $extra = '')
+    {
+        return $this->class('btn btn-' . $type . ' ' . $extra);
     }
 
 }

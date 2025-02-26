@@ -8,11 +8,20 @@ trait HasShow
 {
     public function show(...$args)
     {
-        $id      = array_pop($args);
+        $id   = array_pop($args);
+        $show = $this->detail($id);
+        $this->layout()
+            ->title($this->getlabel() . ' ' . __('admin::base.detail'))
+            ->back(admin()->url($this->getRoute()));
+        return $this->layout()->child($show);
+    }
+
+    protected function detail($id)
+    {
         $model   = $this->model($id);
         $show    = Show::make()->model($model);
         $details = [];
-        foreach ($this->detail() as $name => $column) {
+        foreach ($this->infolist($model) as $name => $column) {
             if (is_string($column)) {
                 $column = [
                     'type' => 'text',
@@ -27,15 +36,12 @@ trait HasShow
         }
 
         $show->details($details);
-        $this->layout()
-            ->title($this->getlabel() . ' ' . __('admin::base.detail'))
-            ->back(admin()->url($this->getRoute()));
-        return $this->layout()->child($show);
+
+        return $show;
     }
 
-    protected function detail()
+    protected function infolist($model)
     {
         return [];
     }
-
 }

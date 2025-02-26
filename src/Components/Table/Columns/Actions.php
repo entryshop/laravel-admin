@@ -12,10 +12,28 @@ class Actions extends Cell
 
     public $view = 'admin::table.columns.actions';
 
+    public function actions($callable)
+    {
+        call_user_func($callable, $this);
+        return $this;
+    }
+
     public function link($label, $href, $target = "_self")
     {
         $action = Action::make();
         $action->label($label)->href($href)->target($target);
+        $this->child($action);
+        return $action;
+    }
+
+    public function delete($label, $link)
+    {
+        $action = Action::make();
+        $action->label($label)
+            ->action($link)
+            ->method('delete')
+            ->class('text-danger')
+            ->confirm(__('admin::base.confirm_delete'));
         $this->child($action);
         return $action;
     }
@@ -34,6 +52,6 @@ class Actions extends Cell
 
     public function getDefaultLabel()
     {
-        return 'Actions';
+        return __('admin::base.actions');
     }
 }
