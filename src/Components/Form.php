@@ -2,7 +2,6 @@
 
 namespace Entryshop\Admin\Components;
 
-use Entryshop\Admin\Components\Form\Fields;
 use Entryshop\Admin\Components\Form\Form as BaseForm;
 use Entryshop\Admin\Concerns\HasChildren;
 use Illuminate\Database\Eloquent\Model;
@@ -20,10 +19,20 @@ class Form extends Element
 
     public $view = 'admin::form';
 
+    /**
+     * @var BaseForm
+     */
+    public $form;
+
+    public function registerForm()
+    {
+        $this->form = BaseForm::make();
+    }
+
     public function save($request = null)
     {
         $this->setupForm();
-        $this->form()->validate($request);
+        $this->form->validate($request);
         $model = $this->model();
         foreach ($this->fields() ?? [] as $field) {
             $field->model($model);
@@ -35,26 +44,14 @@ class Form extends Element
 
     public function setupForm()
     {
-        $original_form = $this->getOriginal('form');
-        if ($original_form instanceof BaseForm) {
-            $_form = $original_form;
+        $this->form->fields($this->fields());
+        $this->form->model($this->model());
+
+        if ($model_id = data_get($this->model(), 'id')) {
+            $this->form->put(admin()->url($this->route() . '/' . $model_id));
         } else {
-            $_form = BaseForm::make();
-            $_form->flex(true);
-            $_form->fields($this->fields());
-            if ($model_id = data_get($this->model(), 'id')) {
-                $_form->put(admin()->url($this->route() . '/' . $model_id));
-            } else {
-                $_form->post(admin()->url($this->route()));
-            }
-            $_form->model($this->model());
+            $this->form->post(admin()->url($this->route()));
         }
-
-        if (is_callable($original_form)) {
-            call_user_func($original_form, $_form);
-        }
-
-        $this->form($_form);
     }
 
 }

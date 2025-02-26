@@ -22,6 +22,16 @@ class Text extends Field
 
     public function password()
     {
+        $this->set('require_hash', true);
         return $this->nativeType('password');
+    }
+
+    public function getValueFromRequest($request = null)
+    {
+        $request = $request ?: request();
+        if (!$this->get('require_hash', false)) {
+            return parent::getValueFromRequest($request);
+        }
+        return bcrypt($request->get($this->name()));
     }
 }

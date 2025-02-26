@@ -9,6 +9,6 @@
         </h6>
     </div>
     <div class="card-body">
-        {!! render($_this->form()) !!}
+        {!! render($_this->form) !!}
     </div>
 </div>
