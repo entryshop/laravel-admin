@@ -1,4 +1,3 @@
-<!--  errors -->
 @if(!empty($errors) && $errors->any())
     <div class="alert alert-danger">
         <div class="d-flex flex-column">

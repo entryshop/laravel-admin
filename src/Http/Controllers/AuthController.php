@@ -3,6 +3,7 @@
 namespace Entryshop\Admin\Http\Controllers;
 
 use Entryshop\Admin\Components\Element;
+use Illuminate\Validation\ValidationException;
 
 class AuthController
 {
@@ -25,7 +26,9 @@ class AuthController
             return redirect()->intended(admin()->home());
         }
 
-        return back();
+        throw ValidationException::withMessages([
+            $username => __('admin::auth.failed'),
+        ]);
     }
 
     public function logout()

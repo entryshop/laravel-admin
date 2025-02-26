@@ -40,7 +40,7 @@
         </div>
     </div>
     @if($_this->get('filters', null))
-        @include('admin::widgets.filters', [
+        @include('admin::partials.filters', [
             'id' => $_this->id(),
             'filters'  =>$_this->filters(),
         ])
