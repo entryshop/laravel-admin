@@ -1,8 +1,8 @@
-<div class="card">
+<div class="card" id="{{$_this->id()}}">
     <div class="card-header">
-        <h6 class="card-title mb-0">
+        <span class="card-title">
             @lang('admin::base.detail')
-        </h6>
+        </span>
     </div>
     <div class="card-body">
         <div class="d-flex gap-3 flex-wrap">
