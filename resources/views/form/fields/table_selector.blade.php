@@ -1,8 +1,9 @@
 <div class="input-group" id="{{$_this->id()}}">
-    <select multiple name="{{$_this->name()}}[]" class="form-select"></select>
-    <div class="input-group-append">
-        <span role="button" class="btn-select btn btn-primary"><i class="ri-table-line"></i></span>
-    </div>
+    <select multiple name="{{$_this->name()}}[]" class="form-select hidden"></select>
+    <span type="button" style="position: absolute; right: 46px;top:calc(50% - 10px);" class="btn-clear">
+        <i class="ri-close-line"></i>
+    </span>
+    <button type="button" class="btn-select btn btn-primary ms-n1"><i class="ri-table-line"></i></button>
 </div>
 
 @push('after_body')
@@ -38,7 +39,6 @@
         }
     </style>
 @endpushonce
-
 @push('scripts')
     <script nonce="{{admin()->csp()}}">
         $(function () {

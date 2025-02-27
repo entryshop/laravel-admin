@@ -124,35 +124,43 @@ class Admin {
 
 class SelectTable {
     constructor(options) {
-        this.id = options.id;
-        this.url = options.url;
-        this.nonce = options.nonce;
-        this.selected = [];
-        this.choices = new Choices("#" + this.id + ' .form-select', {
+        let that = this;
+
+        that.id = options.id;
+        that.url = options.url;
+        that.nonce = options.nonce;
+        that.selected = [];
+        that.choices = new Choices("#" + that.id + ' .form-select', {
             removeItemButton: true,
         });
+        that.button_select = $('#' + this.id + ' .btn-select');
+        that.button_clear = $('#' + this.id + ' .btn-clear');
+        that.dialog = $('.select-table-dialog[data-table=' + that.id + ']');
 
-        let that = this;
-        $('#' + this.id + ' .btn-select').on('click', function () {
-            $('.select-table-dialog[data-table=' + that.id + ']').modal('show');
-            that.asyncLoad({
-                    element: $('.select-table-dialog[data-table=' + that.id + ']').data('from'),
-                    nonce: that.nonce,
-                },
-                '.select-table-dialog[data-table=' + that.id + '] .modal-body');
+        that.button_clear.on('click', function () {
+            that.selected = [];
+            that.choices.clearChoices();
+            that.choices.clearStore();
+            that.button_clear.hide();
         });
 
-        $('.select-table-dialog[data-table=' + that.id + '] button.btn-confirm').on('click', function () {
+        that.button_select.on('click', function () {
+            that.asyncLoad({
+                element: that.dialog.data('from'), nonce: that.nonce,
+            }, that.dialog.find('.modal-body'));
+            that.dialog.modal('show');
+        });
+
+        that.dialog.find('button.btn-confirm').on('click', function () {
             let remove_select = [];
-            $('.select-table-dialog[data-table=' + that.id + '] .modal-body .check:checked:not(.selected)').each(function (index, item) {
+            that.dialog.find('.check:checked:not(.selected)').each(function (index, item) {
                 let v = $(item).data('id') + "";
                 that.selected.push({
-                    value: v,
-                    label: $(item).data('label')
+                    value: v, label: $(item).data('label')
                 })
             });
 
-            $('.select-table-dialog[data-table=' + that.id + '] .modal-body .check:not(:checked).selected').each(function (index, item) {
+            that.dialog.find('.check:not(:checked).selected').each(function (index, item) {
                 remove_select.push($(item).data('id') + "");
             });
 
@@ -162,8 +170,18 @@ class SelectTable {
             that.choices.clearChoices();
             that.choices.clearStore();
             that.choices.setValue(that.selected);
-            $('.select-table-dialog[data-table=' + that.id + ']').modal('hide');
+            that.dialog.modal('hide');
+
+            if (that.selected.length > 0) {
+                that.button_clear.show();
+            } else {
+                that.button_clear.hide();
+            }
         });
+
+        that.button_clear.hide();
+
+        $('#' + that.id).removeClass('hidden');
     }
 
     asyncLoad(params, container) {
@@ -182,11 +200,11 @@ class SelectTable {
             }
             for (let i in that.selected) {
                 let id = that.selected[i]['value'];
-                $(container + ' .check[data-id=' + id + ']').prop('checked', true);
-                $(container + ' .check[data-id=' + id + ']').addClass('selected');
+                $(container).find('.check[data-id=' + id + ']').prop('checked', true);
+                $(container).find('.check[data-id=' + id + ']').addClass('selected');
             }
 
-            $(container + ' a').on("click", function (e) {
+            $(container).find('a').on("click", function (e) {
                 e.preventDefault();
                 let _params = admin().params(this.href);
                 _params.element = params.element;
@@ -194,11 +212,11 @@ class SelectTable {
                 that.asyncLoad(_params, container);
             });
 
-            $(container + ' .check').on("change", function () {
+            $(container).find('.check').on("change", function () {
                 console.log($(this).data('id') + ' : ' + $(this).prop('checked'));
             });
 
-            $(container + " form").on("submit", function (e) {
+            $(container).find('form').on('submit', function (e) {
                 e.preventDefault();
                 const formData = new FormData(this);
                 const _params = {};
