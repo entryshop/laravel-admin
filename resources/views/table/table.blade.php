@@ -20,7 +20,9 @@
         <tr>
             @if($_this->selectable())
                 <td>
-                    <input class="form-check-input check" type="checkbox" data-id="{{data_get($model, 'id')}}">
+                    <input class="form-check-input check" type="checkbox"
+                           data-id="{{data_get($model, 'id')}}"
+                           data-label="{{data_get($model, 'name')}}">
                 </td>
             @endif
             @foreach($_this->get('columns')??[] as $column)

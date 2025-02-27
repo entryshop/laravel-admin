@@ -102,6 +102,22 @@ class Admin {
             $(`input[name=${key}]`).addClass('is-invalid');
         }
     }
+
+    asyncRender(url, params, done, error) {
+        $.ajax({
+            type: 'get',
+            url: url,
+            data: params,
+        }).then(function (data) {
+            done(data);
+        }, function (a, b, c) {
+            if (error) {
+                if (error(a, b, c) === false) {
+                    return false;
+                }
+            }
+        })
+    }
 }
 
 (function () {

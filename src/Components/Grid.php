@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Schema;
  * @method self|string title($value = null) Set table title
  * @method self|string|Model|array|iterable models($value = null) Set models
  * @method self|float perPage($value = null) Set per page
+ * @method self|bool selectable($value = null) Can select
  * @method self|array filters($value = []) Set filters
  * @method self|array tools($value = []) Set tool buttons
  * @method self|array batches($value = []) Set batch actions
@@ -141,6 +142,7 @@ class Grid extends Element
         $this->buildModels();
         $this->table->models($this->models);
         $this->table->columns($this->columns());
+        $this->table->selectable($this->selectable());
         if (!empty($this->batches())) {
             $this->table->selectable(true);
         }

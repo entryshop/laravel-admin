@@ -24,9 +24,10 @@ class Form extends Element
     public $view = 'admin::form.form';
 
     public static $availableFields = [
-        'text'   => Fields\Text::class,
-        'image'  => Fields\Image::class,
-        'select' => Fields\Select::class,
+        'text'           => Fields\Text::class,
+        'image'          => Fields\Image::class,
+        'select'         => Fields\Select::class,
+        'table_selector' => Fields\TableSelector::class,
     ];
 
     public function getDefaultMethod()

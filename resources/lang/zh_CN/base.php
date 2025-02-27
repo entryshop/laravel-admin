@@ -4,6 +4,7 @@ return [
     'actions'        => '操作',
     'add'            => '添加',
     'apply'          => '应用',
+    'cancel'         => '取消',
     'cancel_select'  => '取消选择',
     'confirm'        => '确认',
     'confirm_delete' => '确定要删除该数据吗？',

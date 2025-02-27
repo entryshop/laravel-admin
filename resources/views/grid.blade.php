@@ -14,7 +14,7 @@
                             <i class="ri-filter-line"></i>
                             @if(!empty(request('filter')) && $filter_count = count(to_json(request('filter'))))
                                 <span
-                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
                                 {{$filter_count}}
                             </span>
                             @endif
@@ -33,11 +33,11 @@
                 {!! render($_this->tools()) !!}
             </div>
         </div>
-        <div class="batch-actions hidden">
-            @foreach($_this->batches()??[] as $batch_action)
+        @foreach($_this->batches()??[] as $batch_action)
+            <div class="batch-actions hidden">
                 {!! render($batch_action->withAttributes(['data-table' => $_this->table->id()])) !!}
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     </div>
     @if($_this->get('filters', null))
         @include('admin::partials.filters', [
@@ -58,7 +58,6 @@
 @push('scripts')
     <script nonce="{{admin()->csp()}}">
         $('#{{$_this->table->id()}}').on('selectedRowsChanged', function (e, count) {
-            console.log(count);
             let batch_actions = $('.batch-actions');
             if (batch_actions.length === 0) {
                 return;

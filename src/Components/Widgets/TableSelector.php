@@ -10,7 +10,6 @@ class TableSelector extends Grid
 
     public function setupTableSelector()
     {
-        $this->perPage(10);
         $this->selectable(true);
     }
 }
