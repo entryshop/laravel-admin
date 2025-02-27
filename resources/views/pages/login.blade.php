@@ -96,3 +96,6 @@
         </div>
     </footer>
 </div>
+@push('scripts')
+    <script src="{{admin()->asset('js/pages/password-addon.init.js')}}"/>
+@endpush
