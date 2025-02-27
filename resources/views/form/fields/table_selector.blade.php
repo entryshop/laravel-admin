@@ -1,6 +1,8 @@
 <div class="input-group" id="{{$_this->id()}}">
-    <select name="{{$_this->name()}}" class="form-select" disabled></select>
-    <span role="button" class="btn-select btn btn-primary"><i class="ri-table-line"></i></span>
+    <select multiple name="{{$_this->name()}}[]" class="form-select"></select>
+    <div class="input-group-append">
+        <span role="button" class="btn-select btn btn-primary"><i class="ri-table-line"></i></span>
+    </div>
 </div>
 
 @push('after_body')
@@ -24,75 +26,27 @@
     </div>
 @endpush
 
-
 @pushonce('scripts')
     <style nonce="{{admin()->csp()}}">
+        .choices__inner {
+            min-width: 120px;
+            max-width: 400px;
+        }
+
         .choices {
             margin-bottom: 0;
         }
     </style>
-    <script nonce="{{admin()->csp()}}">
-        function SelectTable(id) {
-            let choice = new Choices("#" + id + ' select');
-
-            $('#' + id + ' .btn-select').on('click', function () {
-                $('.select-table-dialog[data-table=' + id + ']').modal('show');
-                asyncLoad(
-                    {
-                        element: $('.select-table-dialog[data-table=' + id + ']').data('from'),
-                        nonce: "{{admin()->csp()}}",
-                    },
-                    '.select-table-dialog[data-table=' + id + '] .modal-body'
-                )
-            });
-
-            $('.select-table-dialog[data-table=' + id + '] button.btn-confirm').on('click', function () {
-                let selected = [];
-                $('.select-table-dialog[data-table=' + id + '] .modal-body .check:checked').each(function (index, item) {
-                    selected.push({
-                        id: $(item).data('id'),
-                        label: $(item).data('label')
-                    })
-                });
-                console.log(selected);
-            });
-        }
-
-        function asyncLoad(params, container) {
-            admin().asyncRender(
-                "{{route(config('admin.as').'api.render.element')}}",
-                params,
-                function (data) {
-                    $(container).html(data);
-                    $(container + ' a').on("click", function (e) {
-                        e.preventDefault();
-                        let _params = admin().params(this.href);
-                        _params.element = params.element;
-                        _params._nonce = "{{admin()->csp()}}";
-                        asyncLoad(_params, container);
-                    });
-                    $(container + " form").on("submit", function (e) {
-                        e.preventDefault();
-                        const formData = new FormData(this);
-                        const _params = {};
-                        formData.forEach((value, key) => {
-                            _params[key] = value;
-                        });
-                        _params.element = params.element;
-                        _params._nonce = "{{admin()->csp()}}";
-                        asyncLoad(_params, container);
-                        return false;
-                    });
-                }
-            );
-        }
-    </script>
 @endpushonce
 
 @push('scripts')
     <script nonce="{{admin()->csp()}}">
         $(function () {
-            SelectTable('{{$_this->id()}}');
+            admin().selectTable({
+                url: "{{route(config('admin.as').'api.render.element')}}",
+                nonce: "{{admin()->csp()}}",
+                id: '{{$_this->id()}}'
+            });
         });
     </script>
 @endpush

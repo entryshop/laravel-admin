@@ -105,9 +105,7 @@ class Admin {
 
     asyncRender(url, params, done, error) {
         $.ajax({
-            type: 'get',
-            url: url,
-            data: params,
+            type: 'get', url: url, data: params,
         }).then(function (data) {
             done(data);
         }, function (a, b, c) {
@@ -117,6 +115,102 @@ class Admin {
                 }
             }
         })
+    }
+
+    selectTable(options) {
+        return new SelectTable(options);
+    }
+}
+
+class SelectTable {
+    constructor(options) {
+        this.id = options.id;
+        this.url = options.url;
+        this.nonce = options.nonce;
+        this.selected = [];
+        this.choices = new Choices("#" + this.id + ' .form-select', {
+            removeItemButton: true,
+        });
+
+        let that = this;
+        $('#' + this.id + ' .btn-select').on('click', function () {
+            $('.select-table-dialog[data-table=' + that.id + ']').modal('show');
+            that.asyncLoad({
+                    element: $('.select-table-dialog[data-table=' + that.id + ']').data('from'),
+                    nonce: that.nonce,
+                },
+                '.select-table-dialog[data-table=' + that.id + '] .modal-body');
+        });
+
+        $('.select-table-dialog[data-table=' + that.id + '] button.btn-confirm').on('click', function () {
+            let remove_select = [];
+            $('.select-table-dialog[data-table=' + that.id + '] .modal-body .check:checked:not(.selected)').each(function (index, item) {
+                let v = $(item).data('id') + "";
+                that.selected.push({
+                    value: v,
+                    label: $(item).data('label')
+                })
+            });
+
+            $('.select-table-dialog[data-table=' + that.id + '] .modal-body .check:not(:checked).selected').each(function (index, item) {
+                remove_select.push($(item).data('id') + "");
+            });
+
+            // remove remove_select values from selected
+            that.selected = that.selected.filter(item => !remove_select.includes(item.value));
+
+            that.choices.clearChoices();
+            that.choices.clearStore();
+            that.choices.setValue(that.selected);
+            $('.select-table-dialog[data-table=' + that.id + ']').modal('hide');
+        });
+    }
+
+    asyncLoad(params, container) {
+        let that = this;
+        admin().asyncRender(this.url, params, function (data) {
+            $(container).html(data);
+
+            that.selected = [];
+            let _values = that.choices.getValue();
+
+            for (let i in _values) {
+                let _value = _values[i];
+                that.selected.push({
+                    value: _value.value, label: _value.label
+                })
+            }
+            for (let i in that.selected) {
+                let id = that.selected[i]['value'];
+                $(container + ' .check[data-id=' + id + ']').prop('checked', true);
+                $(container + ' .check[data-id=' + id + ']').addClass('selected');
+            }
+
+            $(container + ' a').on("click", function (e) {
+                e.preventDefault();
+                let _params = admin().params(this.href);
+                _params.element = params.element;
+                _params._nonce = "{{admin()->csp()}}";
+                that.asyncLoad(_params, container);
+            });
+
+            $(container + ' .check').on("change", function () {
+                console.log($(this).data('id') + ' : ' + $(this).prop('checked'));
+            });
+
+            $(container + " form").on("submit", function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const _params = {};
+                formData.forEach((value, key) => {
+                    _params[key] = value;
+                });
+                _params.element = params.element;
+                _params._nonce = "{{admin()->csp()}}";
+                that.asyncLoad(_params, container);
+                return false;
+            });
+        });
     }
 }
 
