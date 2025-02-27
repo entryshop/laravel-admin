@@ -1,40 +1,46 @@
-@php
-    $class = '';
-    if(!empty($errors->get($_this->name()))) {
-        $class = 'is-invalid';
-        $error_message = $errors->get($_this->name())[0] ?? null;
-    }
-@endphp
-
-<input {!! $_this->getAttributes()->merge(['class' => $class]) !!}
-       id="{{$_this->id()}}"
-       type="file"
-       @if($_this->readonly()) readonly disabled @endif
-       name="{{$_this->name()}}"
-       placeholder="{{$_this->placeholder()}}"
-       value="{{old($_this->name(), $_this->value())}}">
-@if(isset($error_message))
-    <div class="invalid-feedback">
-        {{$error_message}}
-    </div>
-@endif
+<x-admin::input
+    id="{{$_this->id()}}"
+    name="{{$_this->name()}}"
+    type="file"
+    :readonly="$_this->get('readonly', false)"
+    :value="old($_this->name(), $_this->value())"
+    :placeholder="$_this->placeholder()"
+/>
 
 @if($image  = $_this->value())
-    <div>
-        <input type="hidden" name="{{$_this->name()}}_remove" value="0">
-        <div>
-            <img class="mt-1" src="{{$image}}" alt="" width="80">
+    <div class="simplebar-content-wrapper mt-2" tabindex="0" role="region" aria-label="scrollable content">
+        <div class="simplebar-content">
+            <ul class="list-group mb-1">
+                <li class="list-group-item">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <img src="{{$image}}" alt="" class="avatar-xs rounded">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <span class="text-danger">
+                                <a class="text-danger remove-image" role="button">
+                                    <i class="ri-delete-bin-2-line"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <small><a class="text-danger remove-image" role="button">Remove</a></small>
     </div>
-    @push('scripts')
-        <script nonce="{{admin()->csp()}}">
-            $('.remove-image').on('click', function () {
-                let $this = $(this);
-                $this.closest('form').find('input[name="{{$_this->name()}}_remove"]').val('1');
-                // hide image
-                $this.closest('div').hide();
-            })
-        </script>
-    @endpush
 @endif
+
+@pushonce('scripts')
+    <script nonce="{{admin()->csp()}}">
+        $('.remove-image').on('click', function () {
+            let $this = $(this);
+            $this.closest('form').find('input[name="{{$_this->name()}}_remove"]').val('1');
+            // hide image
+            $this.closest('.list-group-item').hide();
+        })
+    </script>
+@endpushonce

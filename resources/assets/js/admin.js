@@ -1,6 +1,6 @@
 /**
- * Entryshop laravel admin
- * Author: Alex
+ * Entryshop admin
+ * Author: Alex (alex@parse.cn)
  */
 class Admin {
     cspNonce;
@@ -12,7 +12,7 @@ class Admin {
             }
         });
 
-        var metaElement = document.querySelector('meta[name="csp-nonce"]');
+        const metaElement = document.querySelector('meta[name="csp-nonce"]');
 
         if (metaElement) {
             this.cspNonce = metaElement.getAttribute('content');
