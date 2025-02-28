@@ -68,6 +68,10 @@ class Grid extends Element
             $this->models = app($this->models);
         }
 
+        if (empty($this->models)) {
+            return;
+        }
+
         $this->applySearch();
 
         // apply filters

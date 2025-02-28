@@ -2,6 +2,8 @@
 
 namespace Entryshop\Admin\Components\Form\Fields;
 
+use Illuminate\Support\Facades\Hash;
+
 /**
  * @method self|string placeholder($value = null)
  * @method self|string nativeType($value = null)
@@ -29,9 +31,18 @@ class Text extends Field
     public function getValueFromRequest($request = null)
     {
         $request = $request ?: request();
+
         if (!$this->get('require_hash', false)) {
             return parent::getValueFromRequest($request);
         }
-        return bcrypt($request->get($this->name()));
+
+        $value = $request->get($this->name());
+
+        // check if need hash
+        if (!Hash::isHashed($value)) {
+            return bcrypt($value);
+        }
+
+        return $value;
     }
 }

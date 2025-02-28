@@ -133,8 +133,8 @@ class SelectTable {
         that.choices = new Choices("#" + that.id + ' .form-select', {
             removeItemButton: true,
         });
-        that.button_select = $('#' + this.id + ' .btn-select');
-        that.button_clear = $('#' + this.id + ' .btn-clear');
+        that.button_select = $('#' + that.id + ' .btn-select');
+        that.button_clear = $('#' + that.id + ' .btn-clear');
         that.dialog = $('.select-table-dialog[data-table=' + that.id + ']');
 
         that.button_clear.on('click', function () {
