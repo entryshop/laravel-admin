@@ -1,7 +1,7 @@
 @extends('admin::layouts.html')
 
 @section('body')
-    @stack('before_body')
+    @stack('before_content')
     <div id="layout-wrapper">
         <header id="page-topbar">
             <div class="layout-width">
@@ -164,5 +164,5 @@
             </div>
         </div>
     </div>
-    @stack('after_body')
+    @stack('after_content')
 @endsection

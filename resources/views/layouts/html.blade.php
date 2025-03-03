@@ -18,9 +18,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="csp-nonce" content="{{ admin()->csp() }}">
     <title>{{admin()->title() ?? admin()->name()}}</title>
-    <link rel="shortcut icon" href="{{admin()->favicon() ?? admin()->asset('images/favicon.ico')}}">
+    @if($description = admin()->description())
+        <meta name="description" content="{{$description}}">
+    @endif
+    <link nonce="{{admin()->csp()}}" rel="shortcut icon"
+          href="{{admin()->favicon() ?? admin()->asset('images/favicon.ico')}}">
     @foreach(admin()->css() as $css)
-        <link href="{{$css}}" rel="stylesheet" type="text/css"/>
+        <link nonce="{{admin()->csp()}}" href="{{$css}}" rel="stylesheet" type="text/css"/>
     @endforeach
     @stack('styles')
     <style nonce="{{admin()->csp()}}">
@@ -28,9 +32,11 @@
     </style>
 </head>
 <body @stack('body_attributes')>
+@stack('before_body')
 @yield('body')
+@stack('after_body')
 @foreach(admin()->js() as $js)
-    <script src="{{$js}}"></script>
+    <script nonce="{{admin()->csp()}}" src="{{$js}}"></script>
 @endforeach
 @stack('scripts')
 <script nonce="{{admin()->csp()}}">

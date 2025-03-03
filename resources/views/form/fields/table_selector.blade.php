@@ -45,7 +45,8 @@
             admin().selectTable({
                 url: "{{route(config('admin.as').'api.render.element')}}",
                 nonce: "{{admin()->csp()}}",
-                id: '{{$_this->id()}}'
+                id: '{{$_this->id()}}',
+                multiple: {{$_this->multiple() ? 'true':'false'}},
             });
         });
     </script>
