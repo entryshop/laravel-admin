@@ -4,6 +4,7 @@ namespace Entryshop\Admin\Components;
 
 use Entryshop\Admin\Components\Table\Columns;
 use Entryshop\Admin\Components\Table\Table;
+use Entryshop\Admin\Components\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,11 @@ class Grid extends Element
     public static $availableColumns = [
         'text'  => Columns\Text::class,
         'image' => Columns\Image::class,
+    ];
+
+    public static $availableFilters = [
+        'text' => Filters\Text::class,
+        'date' => Filters\Date::class,
     ];
 
     public function registerGrid()

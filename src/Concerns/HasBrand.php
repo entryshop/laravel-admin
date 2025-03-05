@@ -15,4 +15,14 @@ trait HasBrand
     {
         return config('app.name');
     }
+
+    public function getDefaultLogo()
+    {
+        return admin()->asset('images/logo-dark.png');
+    }
+
+    public function getDefaultMiniLogo()
+    {
+        return admin()->asset('images/logo-dark-sm.png');
+    }
 }

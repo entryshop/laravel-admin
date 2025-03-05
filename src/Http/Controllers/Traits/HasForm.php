@@ -72,7 +72,7 @@ trait HasForm
 
     protected function fields($form)
     {
-        return [];
+        return $this->crud()['fields'] ?? [];
     }
 
     protected function save($id = null, $request = null)

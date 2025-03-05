@@ -88,6 +88,15 @@ class CrudController
         return Str::plural($this->getLabel());
     }
 
+    protected function crud()
+    {
+        return [
+            'columns'  => [],
+            'fields'   => [],
+            'infolist' => [],
+        ];
+    }
+
     protected function getLang($name)
     {
         if (empty($this->lang)) {

@@ -106,22 +106,22 @@ trait HasIndex
 
     protected function order()
     {
-        return [];
+        return $this->crud()['order'] ?? [];
     }
 
     protected function searches()
     {
-        return ['*'];
+        return $this->crud()['searches'] ?? [];
     }
 
     protected function filters()
     {
-        return [];
+        return $this->crud()['filters'] ?? [];
     }
 
     protected function tools()
     {
-        return [
+        return $this->crud()['tools'] ?? [
             Action::make('create')
                 ->icon('ri-add-line')
                 ->class('btn btn-primary')
@@ -132,8 +132,7 @@ trait HasIndex
 
     protected function batches()
     {
-        return [
-        ];
+        return $this->crud()['batches'] ?? [];
     }
 
     protected function actions($view = 'index')
@@ -163,12 +162,12 @@ trait HasIndex
                     ->method('delete');
             }
         }
-        return $actions;
+        return $this->crud()['actions'] ?? $actions;
     }
 
     protected function columns()
     {
-        return [];
+        return $this->crud()['columns'] ?? [];
     }
 
     protected function getColumn($column)

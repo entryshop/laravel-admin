@@ -10,18 +10,18 @@
                         <div class="navbar-brand-box horizontal-logo">
                             <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{{admin()->miniLogo()}}" alt="" height="22">
+                                    <img src="{{admin()->miniLogo()}}" alt="" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{admin()->logo()}}" alt="" height="17">
+                                    <img src="{{admin()->logo()}}" alt="" height="32">
                                 </span>
                             </a>
                             <a href="#" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{{admin()->miniLogo()}}" alt="" height="22">
+                                    <img src="{{admin()->miniLogo()}}" alt="" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{admin()->logo()}}" alt="" height="17">
+                                    <img src="{{admin()->logo()}}" alt="" height="32">
                                 </span>
                             </a>
                         </div>
@@ -44,7 +44,9 @@
                                 <i class='bx bx-fullscreen fs-22'></i>
                             </button>
                         </div>
-
+                        @guest
+                            Login
+                        @endguest
                         @auth()
                             <div class="dropdown ms-sm-3 header-item topbar-user">
                                 <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
@@ -84,19 +86,19 @@
             <div class="navbar-brand-box">
                 <a href="#" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{admin()->miniLogo()}}" alt="" height="22">
+                        <img src="{{admin()->miniLogo()}}" alt="" height="32">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{admin()->logo()}}" alt="" height="17">
+                        <img src="{{admin()->logo()}}" alt="" height="32">
                     </span>
                 </a>
                 <!-- Light Logo-->
                 <a href="#" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{admin()->miniLogo()}}" alt="" height="22">
+                        <img src="{{admin()->miniLogo()}}" alt="" height="32">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{admin()->logo()}}" alt="" height="17">
+                        <img src="{{admin()->logo()}}" alt="" height="32">
                     </span>
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
