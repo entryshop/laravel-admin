@@ -52,9 +52,26 @@ class Admin
         return $this->layout;
     }
 
-    public function menus(...$args)
+    public function menus(array $menus)
     {
-        $this->layout()->menus(...$args);
+        $exist_menus = $this->layout()->menus() ?? [];
+        // add $menus to $exist_menus
+        $menus = array_merge($exist_menus, $menus);
+        $this->layout()->menus($menus);
+        return $this;
+    }
+
+    public function menu($menu, $append = true)
+    {
+        $menus = $this->layout()->menus() ?? [];
+
+        if ($append) {
+            $menus[] = $menu;
+        } else {
+            array_unshift($menus, $menu);
+        }
+
+        $this->layout()->menus($menus);
         return $this;
     }
 

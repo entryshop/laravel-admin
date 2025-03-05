@@ -11,4 +11,8 @@ namespace Entryshop\Admin\Concerns;
 trait HasBrand
 {
 
+    public function getDefaultName()
+    {
+        return config('app.name');
+    }
 }
