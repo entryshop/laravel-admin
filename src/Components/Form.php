@@ -54,4 +54,10 @@ class Form extends Element
         }
     }
 
+    public function flex($flex = true)
+    {
+        $this->form->flex($flex);
+        return $this;
+    }
+
 }

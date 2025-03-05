@@ -13,7 +13,9 @@ return [
     'detail'         => 'Detail',
     'edit'           => 'Edit',
     'reset'          => 'Reset',
+    'saved_success'  => 'Saved successfully',
     'search'         => 'Search',
     'submit'         => 'Submit',
     'view'           => 'View',
+    'update_success' => 'Updated successfully',
 ];

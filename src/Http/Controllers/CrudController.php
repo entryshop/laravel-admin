@@ -4,6 +4,10 @@ namespace Entryshop\Admin\Http\Controllers;
 
 use Entryshop\Admin\Concerns\CanCallMethods;
 use Entryshop\Admin\Concerns\HasVariables;
+use Entryshop\Admin\Http\Controllers\Traits\CanDelete;
+use Entryshop\Admin\Http\Controllers\Traits\HasForm;
+use Entryshop\Admin\Http\Controllers\Traits\HasIndex;
+use Entryshop\Admin\Http\Controllers\Traits\HasShow;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Lang;
@@ -11,8 +15,8 @@ use Illuminate\Support\Str;
 
 class CrudController
 {
-    use CanCallMethods;
-    use HasVariables;
+    use CanCallMethods, HasVariables;
+    use HasIndex, HasShow, HasForm, CanDelete;
 
     /**
      * @var string|Model|Builder
@@ -43,16 +47,17 @@ class CrudController
         $model_class = $this->getModelClass();
 
         if (empty($id)) {
+            $model_class = class_from_contract($model_class);
             return new $model_class;
         }
 
-        return $this->getModelClass()::find($id);
+        return app($this->getModelClass())->find($id);
     }
 
     protected function models()
     {
         if (is_string($this->getModelClass())) {
-            return $this->getModelClass()::query();
+            return app($this->getModelClass())->query();
         }
 
         return $this->model;
@@ -95,5 +100,10 @@ class CrudController
         }
 
         return Str::ucfirst($name);
+    }
+
+    protected function layout()
+    {
+        return admin()->layout();
     }
 }

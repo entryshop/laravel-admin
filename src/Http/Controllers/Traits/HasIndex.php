@@ -18,17 +18,15 @@ trait HasIndex
     public function index()
     {
         admin()->title($this->getLabelPlural());
-        $grid = $this->grid();
+        $grid = Grid::make();
+        $grid->models($this->models());
+        $grid = $this->grid($grid);
         $this->layout()->title($this->getLabelPlural());
         return $this->layout()->child($grid)->render();
     }
 
-    protected function grid()
+    protected function grid($grid)
     {
-        $grid = Grid::make();
-
-        $grid->models($this->models());
-
         $columns = [];
 
         foreach ($this->columns() as $name => $column) {
@@ -61,7 +59,7 @@ trait HasIndex
         $grid->columns($columns);
 
         if (!empty($searches = $this->searches())) {
-            $grid->search($searches);
+            $grid->searches($searches);
         }
 
         $filters = [];

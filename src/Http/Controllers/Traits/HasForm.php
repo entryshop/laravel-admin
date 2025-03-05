@@ -3,17 +3,26 @@
 namespace Entryshop\Admin\Http\Controllers\Traits;
 
 use Entryshop\Admin\Components\Form;
+use Entryshop\Models\Member;
 
 trait HasForm
 {
     public function edit(...$args)
     {
-        $id = array_pop($args);
+        $id    = array_pop($args);
+        $model = $this->model($id);
+        $form  = $this->form(
+            Form::make()
+                ->route($this->getRoute())
+                ->editing(true)
+                ->model($model)
+        );
 
-        $this->layout()
+        return $this->layout()
             ->title(__('admin::base.edit') . ' ' . $this->getlabel())
-            ->back(admin()->url($this->getRoute()));
-        return $this->layout()->child($this->form($id))->render();
+            ->back(admin()->url($this->getRoute()))
+            ->child($form)
+            ->render();
     }
 
     public function update(...$args)
@@ -26,27 +35,32 @@ trait HasForm
 
     public function create()
     {
-        $this->layout()
+        $form = $this->form(
+            Form::make()
+                ->route($this->getRoute())
+                ->editing(false)
+        );
+
+        return $this->layout()
             ->title(__('admin::base.create') . ' ' . $this->getlabel())
-            ->back(admin()->url($this->getRoute()));
-        return $this->layout()->child($this->form())->render();
+            ->back(admin()->url($this->getRoute()))
+            ->child($this->form($form))
+            ->render();
     }
 
     public function store()
     {
         $this->save();
         admin()->success(__('admin::base.saved_success'));
-        return $this->index();
+        return redirect(admin()->url($this->getRoute()));
     }
 
-    protected function form($id = null)
+    protected function form($form)
     {
-        $model  = $this->model($id);
-        $form   = Form::make()
-            ->model($model)
-            ->route($this->getRoute())
-            ->editing(true);
-        $fields = Form\Form::toFields($this->fields($id));
+        $form->flex();
+
+        $fields = Form\Form::toFields($this->fields($form));
+
         foreach ($fields as $field) {
             if (!$field->getOriginal('label')) {
                 $field->label($this->getLang($field->name()));
@@ -56,14 +70,17 @@ trait HasForm
         return $form;
     }
 
-    protected function fields($id = null)
+    protected function fields($form)
     {
         return [];
     }
 
     protected function save($id = null, $request = null)
     {
-        $form  = $this->form($id);
+        $form  = Form::make();
+        $model = $this->model($id);
+        $form->model($model);
+        $form  = $this->form($form);
         $model = $form->save($request);
         $model->save();
     }

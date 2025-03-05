@@ -14,6 +14,9 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 
+/**
+ * @deprecated
+ */
 class AdminController
 {
     use CanCallMethods;
@@ -50,6 +53,7 @@ class AdminController
         $model_class = $this->getModelClass();
 
         if (empty($id)) {
+            $model_class = class_from_contract($model_class);
             return new $model_class;
         }
 
