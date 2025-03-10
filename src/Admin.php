@@ -55,7 +55,6 @@ class Admin
     public function menus(array $menus)
     {
         $exist_menus = $this->layout()->menus() ?? [];
-        // add $menus to $exist_menus
         $menus = array_merge($exist_menus, $menus);
         $this->layout()->menus($menus);
         return $this;

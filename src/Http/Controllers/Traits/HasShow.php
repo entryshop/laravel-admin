@@ -42,6 +42,7 @@ trait HasShow
 
     protected function infolist($model)
     {
-        return $this->crud()['infolist'] ?? [];
+        $crud = $this->crud();
+        return $crud['infolist'] ?? ($crud['columns'] ?? []);
     }
 }
