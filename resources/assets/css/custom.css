@@ -11,3 +11,8 @@ body, html {
 .hidden {
     display: none;
 }
+
+.logo-lg img {
+    max-width: 100%;
+    max-height: 100%;
+}
