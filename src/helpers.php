@@ -220,3 +220,10 @@ if (!function_exists('to_attributes')) {
         })->implode(' ');
     }
 }
+
+if (!function_exists('class_from_contract')) {
+    function class_from_contract($contract)
+    {
+        return get_class(app($contract));
+    }
+}
