@@ -15,7 +15,7 @@
         @endif
         class="nav-link menu-link">
         @if($icon = $_this->icon())
-            <i class="{{$icon}}"></i>
+            <i data-lucide="{{$icon}}" class="{{$icon}}"></i>
         @endif
         <span>{{$_this->label()}}</span>
     </a>
