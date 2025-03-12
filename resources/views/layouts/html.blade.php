@@ -41,6 +41,10 @@
 @stack('scripts')
 <script nonce="{{admin()->csp()}}">
     {!! $_this->scripts() !!}
+
+    @foreach(admin()->script() as $script)
+        {!! $script !!}
+    @endforeach
 </script>
 @include('admin::partials.toasts')
 </body>

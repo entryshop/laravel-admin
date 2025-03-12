@@ -3,6 +3,7 @@
 namespace Entryshop\Admin\Http\Controllers\Traits;
 
 use Entryshop\Admin\Components\Form;
+use Entryshop\Admin\Components\Table\Columns\Actions;
 use Entryshop\Models\Member;
 
 trait HasForm
@@ -17,6 +18,10 @@ trait HasForm
                 ->editing(true)
                 ->model($model)
         );
+
+        if (!empty($actions = $this->actions('edit'))) {
+            $form->actions(Actions::make()->children($actions));
+        }
 
         return $this->layout()
             ->title(__('admin::base.edit') . ' ' . $this->getlabel())

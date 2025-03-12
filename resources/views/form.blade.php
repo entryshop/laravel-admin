@@ -7,6 +7,13 @@
                 @lang("admin::base.create")
             @endif
         </span>
+
+        @if($actions = $_this->actions())
+            <div class="float-end">
+                {!! render($actions, ['model'=> $_this->model()]) !!}
+            </div>
+        @endif
+
     </div>
     <div class="card-body">
         {!! render($_this->form) !!}

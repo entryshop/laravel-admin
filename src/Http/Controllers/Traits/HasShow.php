@@ -3,6 +3,7 @@
 namespace Entryshop\Admin\Http\Controllers\Traits;
 
 use Entryshop\Admin\Components\Show;
+use Entryshop\Admin\Components\Table\Columns\Actions;
 
 trait HasShow
 {
@@ -36,6 +37,11 @@ trait HasShow
         }
 
         $show->details($details);
+
+        if (!empty($actions = $this->actions('show'))) {
+            $show->actions(Actions::make()
+                ->children($actions));
+        }
 
         return $show;
     }

@@ -9,12 +9,6 @@ use Entryshop\Admin\Components\Widgets\Action;
 
 trait HasIndex
 {
-    public $index_actions = [
-        'view'   => true,
-        'edit'   => true,
-        'delete' => true,
-    ];
-
     public function index()
     {
         admin()->title($this->getLabelPlural());
@@ -50,7 +44,7 @@ trait HasIndex
             }
         }
 
-        if (!empty($actions = $this->actions())) {
+        if (!empty($actions = $this->actions('index'))) {
             $columns[] = Actions::make()
                 ->label(__('admin::base.actions'))
                 ->children($actions);
@@ -133,36 +127,6 @@ trait HasIndex
     protected function batches()
     {
         return $this->crud()['batches'] ?? [];
-    }
-
-    protected function actions($view = 'index')
-    {
-        $actions = [];
-        if ($view === 'index') {
-            if ($this->index_actions['view']) {
-                $actions[] = Action::make(label: __('admin::base.view'))
-                    ->class('btn btn-xs btn-ghost-primary')
-                    ->icon('ri-eye-line')
-                    ->href(admin()->url($this->getRoute() . '/{model.id}'));
-            }
-
-            if ($this->index_actions['edit']) {
-                $actions[] = Action::make(label: __('admin::base.edit'))
-                    ->icon('ri-edit-line')
-                    ->class('btn btn-xs btn-ghost-primary')
-                    ->href(admin()->url($this->getRoute() . '/{model.id}/edit'));
-            }
-
-            if ($this->index_actions['delete']) {
-                $actions[] = Action::make(label: __('admin::base.delete'))
-                    ->action(admin()->url($this->getRoute() . '/{model.id}'))
-                    ->icon('ri-delete-bin-line')
-                    ->class('btn btn-xs btn-ghost-danger')
-                    ->confirm(__('admin::base.confirm_delete'))
-                    ->method('delete');
-            }
-        }
-        return $this->crud()['actions'] ?? $actions;
     }
 
     protected function columns()

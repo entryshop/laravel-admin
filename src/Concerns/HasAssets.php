@@ -23,6 +23,14 @@ trait HasAssets
         return $this->push('js', $value);
     }
 
+    public function script($value = null)
+    {
+        if (empty($value)) {
+            return $this->get('script', []);
+        }
+        return $this->push('script', $value);
+    }
+
     public function css($value = null)
     {
         if (empty($value)) {
@@ -52,6 +60,7 @@ trait HasAssets
     {
         return [
             $this->asset('css/bootstrap.min.css'),
+            $this->asset('libs/tabler-icons-3.31.0/webfont/tabler-icons.min.css'),
             $this->asset('css/icons.min.css'),
             $this->asset('css/app.min.css'),
             $this->asset('css/custom.min.css'),

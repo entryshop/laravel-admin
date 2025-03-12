@@ -3,6 +3,11 @@
         <span class="card-title">
             @lang('admin::base.detail')
         </span>
+        @if($actions = $_this->actions())
+            <div class="float-end">
+                {!! render($actions, ['model' => $_this->model()]) !!}
+            </div>
+        @endif
     </div>
     <div class="card-body">
         <div class="d-flex gap-3 flex-wrap">

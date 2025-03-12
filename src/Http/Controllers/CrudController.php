@@ -5,6 +5,7 @@ namespace Entryshop\Admin\Http\Controllers;
 use Entryshop\Admin\Concerns\CanCallMethods;
 use Entryshop\Admin\Concerns\HasVariables;
 use Entryshop\Admin\Http\Controllers\Traits\CanDelete;
+use Entryshop\Admin\Http\Controllers\Traits\HasActions;
 use Entryshop\Admin\Http\Controllers\Traits\HasForm;
 use Entryshop\Admin\Http\Controllers\Traits\HasIndex;
 use Entryshop\Admin\Http\Controllers\Traits\HasShow;
@@ -16,7 +17,7 @@ use Illuminate\Support\Str;
 class CrudController
 {
     use CanCallMethods, HasVariables;
-    use HasIndex, HasShow, HasForm, CanDelete;
+    use HasActions, HasIndex, HasShow, HasForm, CanDelete;
 
     /**
      * @var string|Model|Builder
