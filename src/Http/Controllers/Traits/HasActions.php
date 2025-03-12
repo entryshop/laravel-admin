@@ -29,6 +29,14 @@ trait HasActions
         return $actions;
     }
 
+    protected function getActionList()
+    {
+        return Action::make(label: __('admin::base.list'))
+            ->class('btn btn-xs btn-ghost-primary')
+            ->icon('ri-list-unordered')
+            ->href(admin()->url($this->getRoute()));
+    }
+
     protected function getActionView()
     {
         return Action::make(label: __('admin::base.view'))

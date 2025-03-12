@@ -12,6 +12,7 @@ return [
     'delete'         => 'Delete',
     'detail'         => 'Detail',
     'edit'           => 'Edit',
+    'list'           => 'List',
     'reset'          => 'Reset',
     'saved_success'  => 'Saved successfully',
     'search'         => 'Search',

@@ -12,6 +12,7 @@ return [
     'delete'         => '删除',
     'detail'         => '详情',
     'edit'           => '编辑',
+    'list'           => '列表',
     'reset'          => '重置',
     'saved_success'  => '保存成功',
     'search'         => '搜索',
