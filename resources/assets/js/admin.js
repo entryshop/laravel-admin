@@ -5,22 +5,34 @@
 class Admin {
     cspNonce;
 
+    static make() {
+        if (!window._admin) {
+            window._admin = new Admin();
+            window._admin.init();
+        }
+        return window._admin;
+    }
+
     init() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        this.initCstfToken();
+        this.initCspNonce();
+        this.initActionButton();
+    }
 
+    initCstfToken() {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        if (csrfToken) {
+            $.ajaxSetup({headers: {'X-CSRF-TOKEN': csrfToken}});
+        }
+    }
+
+    initCspNonce() {
         const metaElement = document.querySelector('meta[name="csp-nonce"]');
-
         if (metaElement) {
             this.cspNonce = metaElement.getAttribute('content');
         } else {
             console.log('can not found csp nonce');
         }
-
-        this.initActionButton();
     }
 
     initActionButton() {
@@ -53,6 +65,27 @@ class Admin {
                 }
             });
         });
+    }
+
+    toast(toastData) {
+        Toastify({
+            newWindow: true,
+            text: toastData.text,
+            gravity: toastData.gravity,
+            position: toastData.position,
+            className: "bg-" + toastData.className,
+            stopOnFocus: true,
+            escapeMarkup: false,
+            offset: {
+                x: toastData.offset ? 50 : 0, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                y: toastData.offset ? 10 : 0, // vertical axis - can be a number or a string indicating unity. eg: '2em'
+            },
+            duration: toastData.duration,
+            close: toastData.close === "close" ? true : false,
+            style: toastData.style === "style" ? {
+                background: "linear-gradient(to right, var(--vz-success), var(--vz-primary))"
+            } : "",
+        }).showToast();
     }
 
     params(url) {
@@ -233,15 +266,10 @@ class SelectTable {
 }
 
 (function () {
-
     window.admin = function () {
-        if (!window._admin) {
-            window._admin = new Admin();
-        }
-        return window._admin;
+        return Admin.make();
     }
-
-    window.admin().init();
+    window.admin();
 })();
 
 

@@ -26,6 +26,9 @@ trait HasRoutes
 
     public function url($path)
     {
+        if (Str::isUrl($path)) {
+            return $path;
+        }
         if (Str::startsWith($path, '/')) {
             $path = Str::replaceFirst('/', '', $path);
         }

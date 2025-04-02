@@ -50,7 +50,7 @@ trait HasAssets
             $this->asset('libs/feather-icons/feather.min.js'),
             $this->asset('libs/flatpickr/flatpickr.min.js'),
             $this->asset('libs/toastify-js/src/toastify.js'),
-            'https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js',
+            $this->asset('libs/choices.js@10.2.0/choices.min.js'),
             $this->asset('js/app.js'),
             $this->asset('js/admin.js'),
         ];

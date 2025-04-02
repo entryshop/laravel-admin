@@ -63,7 +63,7 @@
                         </span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    @foreach($_this->userMenus() as $userMenu)
+                                    @foreach($_this->userMenus() ?? [] as $userMenu)
                                         <a class="dropdown-item" href="{{$userMenu->link()}}">
                                             @if($icon = $userMenu->icon())
                                                 <i class="{{$icon}} text-muted fs-16 align-middle me-1"></i>
@@ -111,7 +111,7 @@
                 <div class="container-fluid">
                     <div id="two-column-menu">
                     </div>
-                    @include('admin::layouts.partials.sidebar', ['menus' => $_this->menus()])
+                    @include('admin::layouts.partials.sidebar', ['menus' => $_this->get('menus', [])])
                 </div>
             </div>
             <div class="sidebar-background"></div>
@@ -161,6 +161,7 @@
 
                     <!-- content -->
                     @include('admin::layouts.partials.children', ['children' => $_this->children ?? []])
+                    @stack('content')
                     <!-- end content -->
                 </div>
             </div>

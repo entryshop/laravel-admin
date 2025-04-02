@@ -41,7 +41,6 @@
 @stack('scripts')
 <script nonce="{{admin()->csp()}}">
     {!! $_this->scripts() !!}
-
     @foreach(admin()->script() as $script)
         {!! $script !!}
     @endforeach

@@ -25,6 +25,7 @@ class Form extends Element
 
     public static $availableFields = [
         'text'           => Fields\Text::class,
+        'json'           => Fields\Json::class,
         'image'          => Fields\Image::class,
         'select'         => Fields\Select::class,
         'table_selector' => Fields\TableSelector::class,
@@ -54,7 +55,8 @@ class Form extends Element
 
     public function getDefaultSubmitButton()
     {
-        return '<button class="btn-submit btn btn-' . $this->get('submitButtonColor', 'primary') . '">' . $this->get('submitButtonLabel', __('admin::base.submit')) . '</button>';
+        return '<button class="btn-submit btn btn-' . $this->get('submitButtonColor',
+                'primary') . '">' . $this->get('submitButtonLabel', __('admin::base.submit')) . '</button>';
     }
 
     public function validate($request = null)

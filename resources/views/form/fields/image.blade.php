@@ -6,6 +6,7 @@
     :value="old($_this->name(), $_this->value())"
     :placeholder="$_this->placeholder()"
 />
+<input type="hidden" name="{{$_this->name()}}_remove" value="0">
 
 @if($image  = $_this->value())
     <div class="simplebar-content-wrapper mt-2" tabindex="0" role="region" aria-label="scrollable content">
@@ -22,7 +23,7 @@
                         </div>
                         <div class="flex-shrink-0">
                             <span class="text-danger">
-                                <a class="text-danger remove-image" role="button">
+                                <a class="text-danger remove-image" role="button" data-name="{{$_this->name()}}">
                                     <i class="ri-delete-bin-2-line"></i>
                                 </a>
                             </span>
@@ -38,8 +39,8 @@
     <script nonce="{{admin()->csp()}}">
         $('.remove-image').on('click', function () {
             let $this = $(this);
-            $this.closest('form').find('input[name="{{$_this->name()}}_remove"]').val('1');
-            // hide image
+            let name = $this.data('name');
+            $this.closest('form').find('input[name="' + name + '_remove"]').val('1');
             $this.closest('.list-group-item').hide();
         })
     </script>

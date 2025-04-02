@@ -100,7 +100,7 @@ trait HasVariables
      */
     public function push(string $key, $value): self
     {
-        $current = $this->variables[$key] ?? [];
+        $current = $this->get($key, []);
 
         if (!is_array($current)) {
             throw new InvalidArgumentException("Variable '{$key}' is not an array");

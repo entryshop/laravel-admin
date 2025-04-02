@@ -1,1 +1,3 @@
-<img {!! $_this->attributes !!} src="{{$_this->value()}}" alt="">
+@if($src = $_this->value())
+    <img {!! $_this->attributes !!} src="{{$src}}" alt="">
+@endif

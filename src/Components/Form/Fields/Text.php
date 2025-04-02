@@ -22,7 +22,7 @@ class Text extends Field
         return $this->nativeType('email');
     }
 
-    public function password()
+    public function password($value = true)
     {
         $this->set('require_hash', true);
         return $this->nativeType('password');
